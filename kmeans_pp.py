@@ -1,5 +1,5 @@
 import mykmeanssp as kmns
-import pandas as pd
+
 import numpy as np
 import argparse
 
@@ -46,8 +46,7 @@ parser.add_argument('MAX_ITER', type=int, help="max # of iterations")
 parser.add_argument('filename', type=str, help="path of vile containing vectors")
 args = parser.parse_args()
 
-df = pd.read_csv(args.filename, header=None)
-fvectors = df.to_numpy()
+df =
 fcentroids = k_means_pp(fvectors, args.K, args.d, args.N)
 fvectors = list(fvectors.reshape(fvectors.size))
 fcentroids = list(fcentroids.reshape(fcentroids.size))
