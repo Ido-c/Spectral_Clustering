@@ -1,5 +1,6 @@
 import numpy as np
 from sklearn.datasets import make_blobs
+import utils
 '''
 maxcap
 '''
@@ -29,10 +30,10 @@ def main(n, k, random):
 
     # Print max capacity
     # Generate random data with indexed data points
-    vectors = make_blobs(n,d,centers=k)
+    vectors,clusters = make_blobs(n,d,centers=k)
+
     # Create 1st txt file
-    data = open("data.txt", "w+")
-    data.write("")
+    utils.save_data(vectors,clusters,d)
     # Create 2nd txt file and put char for K
 
     # Run Kmeanspp and put clusters in 2nd file
