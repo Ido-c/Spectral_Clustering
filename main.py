@@ -28,6 +28,8 @@ def main(n, k, random):
     if flag:
         return
 
+
+
     # Print max capacity
     # Generate random data with indexed data points
     vectors,clusters = make_blobs(n,d,centers=k)
