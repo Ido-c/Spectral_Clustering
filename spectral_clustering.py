@@ -1,5 +1,6 @@
 import numpy as np
 import math
+import utils
 # Form the Weighted Adjacency Matrix W
 
 def spectral_clustering(vectors, n, dim):
@@ -18,11 +19,15 @@ def spectral_clustering(vectors, n, dim):
     # Compute the normalized graph Laplacian
     Lnorm = np.identity(n) - DDM @ WAM @ DDM
 
-# Determine k and obtain the first k eigenvectors of Lnorm
+    # Determine k and obtain the first k eigenvectors of Lnorm
+    eigenvalues, eigenvector_mat = utils.QR_iteration_algorithm(Lnorm)
+    order = np.argsort(eigenvalues)
+    k = utils.eigengap(eigenvalues)
 
-# Let U be the matrix containing the vectors u1; : : : ; uk as columns
+    # Let U be the matrix containing the vectors u1; : : : ; uk as columns
+    U = eigenvector_mat[order[0:k+1]]
 
-# Form the matrix T  from U by renormalizing each of U's rows to have unit length
+    # Form the matrix T  from U by renormalizing each of U's rows to have unit length
 
 # Treating each row of T as a point in Rk, cluster them into k clusters via the K-means algorithm
 

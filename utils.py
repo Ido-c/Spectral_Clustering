@@ -10,23 +10,25 @@ def MGS(A, n):
     for i in range(n):
         temp = np.linalg.norm(U[:, i])
         R[i, i] = temp
-        temp = 1 / temp
-        col = U[:, i] * temp
+        if temp ==0 :
+            errors.division_by_zero() #todo errors
+            return
+        col = U[:, i]/temp
         Q[:, i] = col
         for j in range(i + 1, n):
             Rij = col @ U[:, j]
             R[i, j] = Rij
-            U[:, j] = U[:, j] - Rij * col
-    return (Q, R)
+            U[:, j] = U[:, j] - Rij*col
+    return Q, R
 
 
 # The Eigengap Heuristic
-def Eigengap(values):
+def eigengap(values):
     sorted = np.sort(values)
     index = 0
     max = -1
-    for i in range(len(sorted) // 2):
-        temp = abs(sorted[i] - sorted[i + 1])
+    for i in range(len(sorted)//2):
+        temp = abs(sorted[0, i]-sorted[0, i + 1])
         if temp > max:
             max = temp
             index = i
@@ -56,6 +58,3 @@ def QR_iteration_algorithm(A):
     return (eigenvalues, Q_bar)
 
 
-A = np.array([0, 12, 3, 4, 5, 6, 7, 8, 9], dtype=np.float64).reshape(3, 3)
-x = QR_iteration_algorithm(A)
-print(x)

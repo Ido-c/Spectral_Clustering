@@ -8,3 +8,7 @@ def save_data(vectors,clusters, d):
 
 def usles(x):
     x[2] = 9999999
+
+# A = np.array([0, 12, 3, 4, 5, 6, 7, 8, 9],dtype=np.float64).reshape(3, 3)
+# x = QR_iteration_algorithm(A)
+# print(x)
