@@ -12,7 +12,7 @@ def main(n, k, random):
     if random: # choose at random from range [max_capacity/2, max_capacity]
         k = np.random.randint(MAX_CAP_K//2, MAX_CAP_K + 1)
         n = np.random.randint(MAX_CAP_N//2, MAX_CAP_N + 1)
-    d=np.random.choice(2,3)
+    d=np.random.choice((2,3))
 
     #   arguments assertion
     flag = False
@@ -32,7 +32,8 @@ def main(n, k, random):
 
     # Print max capacity
     # Generate random data with indexed data points
-    vectors,clusters = make_blobs(n,d,centers=k)
+    temp=make_blobs(n_samples=n,n_features=d,centers=k)
+    vectors,clusters = temp
 
     # Create 1st txt file
     utils.save_data(vectors,clusters,d)
