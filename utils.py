@@ -1,5 +1,10 @@
+import math
 import numpy as np
-from sklearn.datasets import make_blobs
+
+
+def find_weight(x, y, dim):
+    dist = np.linalg.norm(x - y)
+    return math.exp(-(dist / 2))
 
 
 # Modified Gram-Shmidt
@@ -10,15 +15,15 @@ def MGS(A, n):
     for i in range(n):
         temp = np.linalg.norm(U[:, i])
         R[i, i] = temp
-        if temp ==0 :
-            errors.division_by_zero() #todo errors
+        if temp == 0:
+            errors.division_by_zero()  # todo errors
             return
-        col = U[:, i]/temp
+        col = U[:, i] / temp
         Q[:, i] = col
         for j in range(i + 1, n):
             Rij = col @ U[:, j]
             R[i, j] = Rij
-            U[:, j] = U[:, j] - Rij*col
+            U[:, j] = U[:, j] - Rij * col
     return Q, R
 
 
@@ -27,8 +32,8 @@ def eigengap(values):
     sorted = np.sort(values)
     index = 0
     max = -1
-    for i in range(len(sorted)//2):
-        temp = abs(sorted[0, i]-sorted[0, i + 1])
+    for i in range(len(sorted) // 2):
+        temp = abs(sorted[0, i] - sorted[0, i + 1])
         if temp > max:
             max = temp
             index = i
@@ -56,5 +61,3 @@ def QR_iteration_algorithm(A):
         Q_bar = new_Q_bar
         eigenvalues = np.array([A[i, i] for i in range(n)], dtype=np.float64)
     return (eigenvalues, Q_bar)
-
-
