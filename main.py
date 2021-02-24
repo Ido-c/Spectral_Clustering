@@ -2,6 +2,7 @@ import numpy as np
 from sklearn.datasets import make_blobs
 import utils
 import spectral_clustering
+import kmeans_pp
 '''
 maxcap
 '''
@@ -32,9 +33,10 @@ def main(n, k, random):
 
     # Print max capacity
     # Generate random data with indexed data points
-    temp=make_blobs(n_samples=n,n_features=d,centers=k)
-    vectors,clusters = temp
-    spectral_clustering.spectral_clustering(vectors, n, d)
+    vectors,clusters = make_blobs(n_samples=n,n_features=d,centers=k)
+    x, k = spectral_clustering.spectral_clustering(vectors, n, d) #todo erase x, k
+    print("now ony kmeans") #todo
+    kmeans_pp.k_means_pp(vectors, k, d, 10, 300)
     # Create 1st txt file
     utils.save_data(vectors,clusters,d)
 
@@ -51,4 +53,4 @@ def main(n, k, random):
     # if __name__ == "__main__":
     #     main()
 
-main(10, 2, False)
+main(10, 2, False) #todo

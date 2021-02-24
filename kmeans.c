@@ -128,8 +128,8 @@ static PyObject *kmeans(PyObject *self, PyObject *args) {
     /*build python list from p3*/
     python_list = PyList_New((k * (n + 1)));
     for (i = 0; i < (k * (n + 1)); ++i){
-        PyObject* python_float = Py_BuildValue("f", p3[i]);
-        PyList_SetItem(python_list, i, python_float);
+        PyObject* python_int = Py_BuildValue("i", p3[i]);
+        PyList_SetItem(python_list, i, python_int);
     }
 
     free(centroids);
@@ -139,7 +139,6 @@ static PyObject *kmeans(PyObject *self, PyObject *args) {
     free(p2);
     free(p3);
     free(vecOfSums);
-    PyObject_Print(python_list, stdout)
     return python_list;
 }
 

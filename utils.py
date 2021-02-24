@@ -1,5 +1,6 @@
 import math
 import numpy as np
+import errors
 
 
 def find_weight(x, y, dim):
@@ -59,5 +60,5 @@ def QR_iteration_algorithm(A):
         if ep < 0.0001:
             break
         Q_bar = new_Q_bar
-        eigenvalues = np.array([A[i, i] for i in range(n)], dtype=np.float64)
-    return (eigenvalues, Q_bar)
+    eigenvalues = np.array([A[i, i] for i in range(n)], dtype=np.float64)
+    return eigenvalues, Q_bar
