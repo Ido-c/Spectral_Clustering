@@ -36,6 +36,7 @@ def main(n, k, random):
 
     # Create 1st txt file
     utils.save_data(vectors,clusters,d)
+
     # Create 2nd txt file and put char for K
 
     # Run Kmeanspp and put clusters in 2nd file

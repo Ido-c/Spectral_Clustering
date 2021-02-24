@@ -21,6 +21,17 @@ def MGS(A, n):
 # QR iteration
 
 # The Eigengap Heuristic
+def Eigengap(values):
+    sorted = np.sort(values)
+    index = 0
+    max = -1
+    for i in range(len(sorted)//2):
+        temp = abs(sorted[i]-sorted[i + 1])
+        if temp > max:
+            max = temp
+            index = i
+    return index
+
 
 # Random data generator (from K and N)
 def save_data(vectors,clusters, d):
