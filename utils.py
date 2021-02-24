@@ -1,5 +1,6 @@
 import numpy as np
 from sklearn.datasets import make_blobs
+import errors
 
 
 # Modified Gram-Shmidt
@@ -11,15 +12,15 @@ def MGS(A, n):
         temp = np.linalg.norm(U[:, i])
         R[i, i] = temp
         if temp ==0 :
-            print(" 0 divvvvvvvvvvv")
-        temp = 1/temp
-        col = U[:, i]*temp
+            errors.division_by_zero() #todo errors
+            return
+        col = U[:, i]/temp
         Q[:, i] = col
         for j in range(i+1, n):
             Rij = col @ U[:, j]
             R[i, j] = Rij
             U[:, j] = U[:, j] - Rij*col
-    return (Q, R)
+    return Q, R
 
 # QR iteration
 
@@ -58,6 +59,3 @@ def QR_iteration_algorithm(A):
         Q_bar = new_Q_bar
     return (A,Q_bar)
 
-A = np.array([0, 12, 3, 4, 5, 6, 7, 8, 9],dtype=np.float64).reshape(3, 3)
-x = QR_iteration_algorithm(A)
-print(x)
