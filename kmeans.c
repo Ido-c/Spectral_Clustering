@@ -18,7 +18,7 @@ double getDistance(double *vec1, double *vec2, int d);
  * MAX_ITER - max number of iterations
  */
 static PyObject *kmeans(PyObject *self, PyObject *args) {
-    PyObject *temp_centroids, *temp_vectors, *item;
+    PyObject *temp_centroids, *temp_vectors, *item, *python_list;
     int k, n, d, MAX_ITER, i, j, tries, change, *p3, **clusters, temp_len;
     double *p1, *p2, **vectors, **centroids, *vecOfSums;
 
@@ -105,6 +105,11 @@ static PyObject *kmeans(PyObject *self, PyObject *args) {
     for (tries = 0; tries < MAX_ITER; ++tries) {
         change = 0; /*a flag to keep track if clusters change*/
 
+        /*reset the clusters*/
+        for (i = 0; i < k; ++i) {
+            clusters[i][0] = 0;
+        }
+
         /* put vectors in clusters*/
         for (i = 0; i < n; ++i) {
             int index = findClosestCluster(vectors[i], (double **) centroids, k, d);
@@ -118,20 +123,13 @@ static PyObject *kmeans(PyObject *self, PyObject *args) {
             }
         }
         if (!change) { break; }
-
-        /*reset the clusters*/
-        for (i = 0; i < k; ++i) {
-            clusters[i][0] = 0;
-        }
     }
 
-    /*printing the centroid results:*/
-    for (i = 0; i < k; ++i) {
-        for (j = 0; j < d; ++j) {
-            printf("%f", centroids[i][j]);
-            if (j != (d - 1)) printf(",");
-        }
-        printf("\n");
+    /*build python list from p3*/
+    python_list = PyList_New((k * (n + 1)));
+    for (i = 0; i < (k * (n + 1)); ++i){
+        PyObject* python_float = Py_BuildValue("f", p3[i]);
+        PyList_SetItem(python_list, i, python_float);
     }
 
     free(centroids);
@@ -141,7 +139,7 @@ static PyObject *kmeans(PyObject *self, PyObject *args) {
     free(p2);
     free(p3);
     free(vecOfSums);
-    Py_RETURN_NONE;
+    return python_list;
 }
 
 /*calculates distance between to vectors

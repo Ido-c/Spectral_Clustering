@@ -1,12 +1,11 @@
 import mykmeanssp as kmns
-
 import numpy as np
 import argparse
 
 def k_means_pp(vectors, K, d, N):
     """variables are:
     centroids_count : count hpe many centroids have been calculated
-    distance : the distence from each vector to the closest centroid
+    distance : the distance from each vector to the closest centroid
     centroid_indices : ndarry containing the indices of the vectors chosen to be centroids
     centroids : ndarray containing the vectors chosen to be centroids
     """
