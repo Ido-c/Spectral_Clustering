@@ -1,12 +1,12 @@
 import numpy as np
 from sklearn.datasets import make_blobs
 import utils
+import spectral_clustering
 '''
 maxcap
 '''
 MAX_CAP_N = 200
 MAX_CAP_K = 10
-
 
 def main(n, k, random):
     if random: # choose at random from range [max_capacity/2, max_capacity]
@@ -34,7 +34,7 @@ def main(n, k, random):
     # Generate random data with indexed data points
     temp=make_blobs(n_samples=n,n_features=d,centers=k)
     vectors,clusters = temp
-
+    spectral_clustering.spectral_clustering(vectors, n, d)
     # Create 1st txt file
     utils.save_data(vectors,clusters,d)
 
@@ -50,3 +50,5 @@ def main(n, k, random):
 
     # if __name__ == "__main__":
     #     main()
+
+main(10, 2, False)

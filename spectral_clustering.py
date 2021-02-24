@@ -7,7 +7,7 @@ import kmeans_pp
 def spectral_clustering(vectors, n, dim):
     # Create the weighted adjacency matrix
     WAM = np.zeros((n, n), dtype=np.float)
-    for i in range(1, n):
+    for i in range(n):
         for j in range(i + 1, n):
             WAM[i, j] = utils.find_weight(vectors[i], vectors[j], dim)
     WAM = WAM + WAM.T

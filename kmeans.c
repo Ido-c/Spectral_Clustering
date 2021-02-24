@@ -139,6 +139,7 @@ static PyObject *kmeans(PyObject *self, PyObject *args) {
     free(p2);
     free(p3);
     free(vecOfSums);
+    PyObject_Print(python_list, stdout)
     return python_list;
 }
 

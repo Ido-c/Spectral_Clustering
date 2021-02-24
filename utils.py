@@ -33,7 +33,7 @@ def eigengap(values):
     index = 0
     max = -1
     for i in range(len(sorted) // 2):
-        temp = abs(sorted[0, i] - sorted[0, i + 1])
+        temp = abs(sorted[i] - sorted[i + 1])
         if temp > max:
             max = temp
             index = i
