@@ -1,6 +1,10 @@
+import math
 import numpy as np
-from sklearn.datasets import make_blobs
-import errors
+
+
+def find_weight(x, y, dim):
+    dist = np.linalg.norm(x - y)
+    return math.exp(-(dist / 2))
 
 
 # Modified Gram-Shmidt
@@ -11,26 +15,25 @@ def MGS(A, n):
     for i in range(n):
         temp = np.linalg.norm(U[:, i])
         R[i, i] = temp
-        if temp ==0 :
-            errors.division_by_zero() #todo errors
+        if temp == 0:
+            errors.division_by_zero()  # todo errors
             return
-        col = U[:, i]/temp
+        col = U[:, i] / temp
         Q[:, i] = col
-        for j in range(i+1, n):
+        for j in range(i + 1, n):
             Rij = col @ U[:, j]
             R[i, j] = Rij
-            U[:, j] = U[:, j] - Rij*col
+            U[:, j] = U[:, j] - Rij * col
     return Q, R
 
-# QR iteration
 
 # The Eigengap Heuristic
 def eigengap(values):
     sorted = np.sort(values)
     index = 0
     max = -1
-    for i in range(len(sorted)//2):
-        temp = abs(sorted[0, i]-sorted[0, i + 1])
+    for i in range(len(sorted) // 2):
+        temp = abs(sorted[0, i] - sorted[0, i + 1])
         if temp > max:
             max = temp
             index = i
@@ -44,18 +47,17 @@ def save_data(vectors, clusters, d):
     np.savetxt("data.txt", data, delimiter=", ", fmt=fmt)
 
 
-
-
+# QR iteration
 def QR_iteration_algorithm(A):
     n = A.shape[0]
     Q_bar = np.identity(n)
     for i in range(n):
-        Q, R = MGS(A,A.shape[0])
+        Q, R = MGS(A, A.shape[0])
         A = R @ Q
         new_Q_bar = Q_bar @ Q
         ep = (np.absolute(Q_bar) - np.absolute(new_Q_bar)).max()
         if ep < 0.0001:
-            return (A,Q_bar)
+            break
         Q_bar = new_Q_bar
-    return (A,Q_bar)
-
+        eigenvalues = np.array([A[i, i] for i in range(n)], dtype=np.float64)
+    return (eigenvalues, Q_bar)

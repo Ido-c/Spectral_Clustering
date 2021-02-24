@@ -1,8 +1,8 @@
 import mykmeanssp as kmns
 import numpy as np
-import argparse
 
-def k_means_pp(vectors, K, d, N):
+
+def k_means_pp(vectors, K, d, N, MAX_ITER):
     """variables are:
     centroids_count : count hpe many centroids have been calculated
     distance : the distance from each vector to the closest centroid
@@ -13,7 +13,7 @@ def k_means_pp(vectors, K, d, N):
     # indices = np.arange(N)
     centroids_count = 1
 
-    centroid_indices = np.zeros(K, dtype=np.int)
+    centroid_indices = np.zeros(K, dtype=np.int64)
     centroid_indices[0] = np.random.choice(N, 1)
     centroids = np.zeros((K, d), dtype=np.float64)
 
@@ -30,23 +30,6 @@ def k_means_pp(vectors, K, d, N):
         centroid_indices[centroids_count] = np.random.choice(N, 1, p=p)
         centroids[centroids_count] = vectors[centroid_indices[centroids_count]]
         centroids_count += 1
-    s = ""
-    for elm in centroid_indices:
-        s = s + str(elm) + ", "
-    print(s[:-2])
-    return centroids
-
-
-parser = argparse.ArgumentParser()
-parser.add_argument('K', type=int, help="# of clusters")
-parser.add_argument('N', type=int, help="# of vectors")
-parser.add_argument('d', type=int, help="# of elements in vector")
-parser.add_argument('MAX_ITER', type=int, help="max # of iterations")
-parser.add_argument('filename', type=str, help="path of vile containing vectors")
-args = parser.parse_args()
-
-df =
-fcentroids = k_means_pp(fvectors, args.K, args.d, args.N)
-fvectors = list(fvectors.reshape(fvectors.size))
-fcentroids = list(fcentroids.reshape(fcentroids.size))
-kmns.kmeans(args.K, args.N, args.d, args.MAX_ITER, fvectors, fcentroids)
+    vectors.reshape(vectors.size)
+    centroids.reshape(centroids.size)
+    kmns.kmeans(K, N, d, MAX_ITER, vectors.tolist(), centroids.tolist())
