@@ -39,7 +39,7 @@ def eigengap(values):
         if temp > max:
             max = temp
             index = i
-    return index+1
+    return index + 1
 
 
 def create_cluster_vector(clusters, n, k):
@@ -58,11 +58,13 @@ def save_data(vectors, clusters, d):
 
 def write_to_file(file, clusters, k, n):
     for i in range(k):
-        lst = [clusters[i*(n+1) + j] for j in range(1, clusters[i * (n + 1)] + 1)]
+        lst = [clusters[i * (n + 1) + j] for j in range(1, clusters[i * (n + 1)] + 1)]
         file.write(str(lst)[1: -1] + "\n")
+
 
 def jaccard_measure():
     return
+
 
 def save_to_pdf(vectors, spectral, kmeans, dim, k, n, obs_k):
     fig = plt.figure()
@@ -79,8 +81,8 @@ def save_to_pdf(vectors, spectral, kmeans, dim, k, n, obs_k):
     plot3 = fig.add_subplot(2, 2, 3)
     plot3.set_axis_off()
     text = "Data was generated from the values:\nn = " + str(n) \
-        + " , k = " + str(k) + "\nThe k that was used for both algorithms was " + str(obs_k) \
-        + "\nThe Jaccard measure for Spectral clustering"
+           + " , k = " + str(k) + "\nThe k that was used for both algorithms was " + str(obs_k) \
+           + "\nThe Jaccard measure for Spectral clustering"
     plot3.text(1.1, 0.6, text, ha="center")
     fig.savefig("clusters.pdf")
 

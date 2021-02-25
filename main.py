@@ -41,17 +41,16 @@ def main(n, k, random):
     utils.save_data(vectors, clusters, d)
 
     # Run Spectral Clustering and put clusters in 2nd file
-    x, obs_k = spectral_clustering.spectral_clustering(vectors, n, d) #todo erase x, k
+    x, obs_k = spectral_clustering.spectral_clustering(vectors, n, d)  # todo erase x, k
     spectral_clusters = utils.create_cluster_vector(x, n, obs_k)
-
 
     # Create 2nd txt file and put char for K
     second_f = open('clusters.txt', 'w+')
-    second_f.write(str(obs_k)+"\n")
+    second_f.write(str(obs_k) + "\n")
     utils.write_to_file(second_f, x, obs_k, n)
 
     # Run Kmeanspp and put clusters in 2nd file
-    print("now ony kmeans") #todo
+    print("now ony kmeans")  # todo
     x = kmeans_pp.k_means_pp(vectors, obs_k, d, n, 300)
     kmeans_clusters = utils.create_cluster_vector(x, n, obs_k)
     utils.write_to_file(second_f, x, obs_k, n)
@@ -59,6 +58,7 @@ def main(n, k, random):
 
     # Create pdf file
     utils.save_to_pdf(vectors, spectral_clusters, kmeans_clusters, d, k, n, obs_k)
+
 
 # Compute Jaccard measure for both algo's and put in pdf
 
@@ -71,8 +71,8 @@ if __name__ == "__main__":
     random = (args.random == "True")
     # k = args.k
     # n = args.n
-    random = args.random #todo check for a better solution
-    print("n is:  ",args.n)
-    print("k is:  ",args.k)
-    print("random is:  ",random)
+    random = args.random  # todo check for a better solution
+    print("n is:  ", args.n)
+    print("k is:  ", args.k)
+    print("random is:  ", random)
     main(args.n, args.k, random)
