@@ -19,7 +19,8 @@ def usles(x):
 fig = plt.figure()
 plot1 = fig.add_subplot(122)
 plot1.plot(range(10))
-plot1.text(.1,.1,"some text")
+
+plot1.text(0,-.3,"some text")
 plot2 = fig.add_subplot(121)
 plot2.plot(a[1])
 
