@@ -41,11 +41,16 @@ def eigengap(values):
     return index
 
 
-# Random data generator (from K and N)
 def save_data(vectors, clusters, d):
     data = np.column_stack((vectors, clusters))
     fmt = ("%f", "%f", "%f", "%d") if d == 3 else ("%f", "%f", "%d")
     np.savetxt("data.txt", data, delimiter=", ", fmt=fmt)
+
+
+def write_to_file(file, clusters, k, n):
+    for i in range(k):
+        lst = [clusters[i*(n+1) + j] for j in range(1, clusters[i * (n + 1)] + 1)]
+        file.write(str(lst)[1: -1] + "\n")
 
 
 # QR iteration
