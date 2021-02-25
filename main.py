@@ -34,21 +34,22 @@ def main(n, k, random):
     # Print max capacity
     # Generate random data with indexed data points
     vectors, clusters = make_blobs(n_samples=n, n_features=d, centers=k)
-
+    print(len(clusters[clusters==0]))
     # Create 1st txt file
     utils.save_data(vectors, clusters, d)
+
+
+    # Run Spectral Clustering and put clusters in 2nd file
+    x, k = spectral_clustering.spectral_clustering(vectors, n, d) #todo erase x, k
 
     # Create 2nd txt file and put char for K
     second_f = open('clusters.txt', 'w+')
     second_f.write(str(k)+"\n")
-
-    # Run Spectral Clustering and put clusters in 2nd file
-    x, k = spectral_clustering.spectral_clustering(vectors, n, d) #todo erase x, k
     utils.write_to_file(second_f, x, k, n)
 
     # Run Kmeanspp and put clusters in 2nd file
     print("now ony kmeans") #todo
-    x = kmeans_pp.k_means_pp(vectors, k, d, 10, 300)
+    x = kmeans_pp.k_means_pp(vectors, k, d, n, 300)
     utils.write_to_file(second_f, x, k, n)
     second_f.close()
 
@@ -61,4 +62,4 @@ def main(n, k, random):
     # if __name__ == "__main__":
     #     main()
 
-main(10, 2, False) #todo
+main(150, 7, False) #todo

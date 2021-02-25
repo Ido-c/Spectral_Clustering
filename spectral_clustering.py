@@ -26,15 +26,14 @@ def spectral_clustering(vectors, n, dim):
     eigenvalues, eigenvector_mat = utils.QR_iteration_algorithm(Lnorm)
     order = np.argsort(eigenvalues)
     k = utils.eigengap(eigenvalues)
-
+    print("k is ",k)# todo
     # Let U be the matrix containing the vectors u1; : : : ; uk as columns
-    U = eigenvector_mat[order[0:k + 1]]
-
+    U = eigenvector_mat[:,order[0:k]]
     # Form the matrix T  from U by renormalizing each of U's rows to have unit length
-    T = np.divide(U.T, np.linalg.norm(U, axis=1))
+    T = np.divide(U.T, np.linalg.norm(U, axis=1)).T
 
     # Treating each row of T as a point in Rk, cluster them into k clusters via the K-means algorithm
     centroids = kmeans_pp.k_means_pp(T,k,T.shape[1],T.shape[0],300)
 
     # Assign the original point xi to cluster j if and only if row i of the matrix T was assigned to cluster j]
-    return centroids,k
+    return (centroids,k)

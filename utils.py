@@ -38,7 +38,7 @@ def eigengap(values):
         if temp > max:
             max = temp
             index = i
-    return index
+    return index+1
 
 
 def save_data(vectors, clusters, d):
