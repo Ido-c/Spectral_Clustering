@@ -18,7 +18,7 @@ double getDistance(double *vec1, double *vec2, int d);
  * MAX_ITER - max number of iterations
  */
 static PyObject *kmeans(PyObject *self, PyObject *args) {
-    PyObject *temp_centroids, *temp_vectors, *item, *python_list;
+    PyObject *temp_centroids, *temp_vectors, *item, *python_list, *python_int;
     int k, n, d, MAX_ITER, i, j, tries, change, *p3, **clusters, temp_len;
     double *p1, *p2, **vectors, **centroids, *vecOfSums;
 
@@ -128,7 +128,7 @@ static PyObject *kmeans(PyObject *self, PyObject *args) {
     /*build python list from p3*/
     python_list = PyList_New((k * (n + 1)));
     for (i = 0; i < (k * (n + 1)); ++i){
-        PyObject* python_int = Py_BuildValue("i", p3[i]);
+        python_int = Py_BuildValue("i", p3[i]);
         PyList_SetItem(python_list, i, python_int);
     }
 
