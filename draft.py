@@ -16,13 +16,7 @@ def usles(x):
 # A = np.array([0, 12, 3, 4, 5, 6, 7, 8, 9],dtype=np.float64).reshape(3, 3)
 # x = QR_iteration_algorithm(A)
 # print(x)
-fig = plt.figure()
-plot1 = fig.add_subplot(122)
-plot1.plot(range(10))
-plot1.text(.1,.1,"some text")
-plot2 = fig.add_subplot(121)
-plot2.plot(a[1])
 
-fig.savefig("testing.pdf")
+
 
 print("done")

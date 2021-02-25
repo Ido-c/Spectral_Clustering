@@ -1,6 +1,7 @@
 import math
 import numpy as np
 import errors
+from matplotlib import pyplot as plt
 
 
 def find_weight(x, y, dim):
@@ -41,6 +42,14 @@ def eigengap(values):
     return index+1
 
 
+def create_cluster_vector(clusters, n, k):
+    vec = np.zeros(n)
+    for i in range(k):
+        for j in range(1, clusters[i * (n + 1)] + 1):
+            vec[clusters[i * (n + 1) + j]] = i + 1
+    return vec
+
+
 def save_data(vectors, clusters, d):
     data = np.column_stack((vectors, clusters))
     fmt = ("%f", "%f", "%f", "%d") if d == 3 else ("%f", "%f", "%d")
@@ -51,6 +60,29 @@ def write_to_file(file, clusters, k, n):
     for i in range(k):
         lst = [clusters[i*(n+1) + j] for j in range(1, clusters[i * (n + 1)] + 1)]
         file.write(str(lst)[1: -1] + "\n")
+
+def jaccard_measure():
+    return
+
+def save_to_pdf(vectors, spectral, kmeans, dim, k, n, obs_k):
+    fig = plt.figure()
+    if dim == 3:
+        plot1 = fig.add_subplot(221, projection='3d')
+        plot2 = fig.add_subplot(222, projection='3d')
+        plot1.scatter(vectors[:, 0], vectors[:, 1], vectors[:, 2], c=spectral)
+        plot2.scatter(vectors[:, 0], vectors[:, 1], vectors[:, 2], c=kmeans)
+    else:
+        plot1 = fig.add_subplot(221)
+        plot2 = fig.add_subplot(222)
+        plot1.scatter(vectors[:, 0], vectors[:, 1], c=spectral)
+        plot2.scatter(vectors[:, 0], vectors[:, 1], c=kmeans)
+    plot3 = fig.add_subplot(2, 2, 3)
+    plot3.set_axis_off()
+    text = "Data was generated from the values:\nn = " + str(n) \
+        + " , k = " + str(k) + "\nThe k that was used for both algorithms was " + str(obs_k) \
+        + "\nThe Jaccard measure for Spectral clustering"
+    plot3.text(1.1, 0.6, text, ha="center")
+    fig.savefig("clusters.pdf")
 
 
 # QR iteration

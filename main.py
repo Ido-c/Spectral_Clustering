@@ -13,7 +13,7 @@ def main(n, k, random):
     if random: # choose at random from range [max_capacity/2, max_capacity]
         k = np.random.randint(MAX_CAP_K//2, MAX_CAP_K + 1)
         n = np.random.randint(MAX_CAP_N//2, MAX_CAP_N + 1)
-    d=np.random.choice((2,3))
+    d = np.random.choice((2,3))
 
     #   arguments assertion
     flag = False
@@ -34,28 +34,30 @@ def main(n, k, random):
     # Print max capacity
     # Generate random data with indexed data points
     vectors, clusters = make_blobs(n_samples=n, n_features=d, centers=k)
-    print(len(clusters[clusters==0]))
+    print(len(clusters[clusters==0])) #todo
     # Create 1st txt file
     utils.save_data(vectors, clusters, d)
 
 
     # Run Spectral Clustering and put clusters in 2nd file
-    x, k = spectral_clustering.spectral_clustering(vectors, n, d) #todo erase x, k
+    x, obs_k = spectral_clustering.spectral_clustering(vectors, n, d) #todo erase x, k
+    spectral_clusters = utils.create_cluster_vector(x, n, obs_k)
+
 
     # Create 2nd txt file and put char for K
     second_f = open('clusters.txt', 'w+')
-    second_f.write(str(k)+"\n")
-    utils.write_to_file(second_f, x, k, n)
+    second_f.write(str(obs_k)+"\n")
+    utils.write_to_file(second_f, x, obs_k, n)
 
     # Run Kmeanspp and put clusters in 2nd file
     print("now ony kmeans") #todo
-    x = kmeans_pp.k_means_pp(vectors, k, d, n, 300)
-    utils.write_to_file(second_f, x, k, n)
+    x = kmeans_pp.k_means_pp(vectors, obs_k, d, n, 300)
+    kmeans_clusters = utils.create_cluster_vector(x, n, obs_k)
+    utils.write_to_file(second_f, x, obs_k, n)
     second_f.close()
 
-
     # Create pdf file
-
+    utils.save_to_pdf(vectors, spectral_clusters, kmeans_clusters, d, k, n, obs_k)
 
     # Compute Jaccard measure for both algo's and put in pdf
 
