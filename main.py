@@ -37,6 +37,11 @@ def main(n, k, random):
     # Generate random data with indexed data points
     vectors, clusters = make_blobs(n_samples=n, n_features=d, centers=k)
     print(len(clusters[clusters == 0]))
+    vectors,clusters = make_blobs(n_samples=n,n_features=d,centers=k)
+    x, k = spectral_clustering.spectral_clustering(vectors, n, d) #todo erase x, k
+    print("k is",k)
+    print("now ony kmeans") #todo
+    kmeans_pp.k_means_pp(vectors, k, d, n, 300)
     # Create 1st txt file
     utils.save_data(vectors, clusters, d)
 
@@ -66,13 +71,13 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('n', type=int, help="# of vectors")
     parser.add_argument('k', type=int, help="# of clusters")
-    parser.add_argument('random', type=bool, help="random k and n")
+    parser.add_argument('--Random',  help="random k and n",default=True,action='store_false')
     args = parser.parse_args()
-    random = (args.random == "True")
+    #random = (args.random == "True") # todo check for a better solution
     # k = args.k
     # n = args.n
-    random = args.random  # todo check for a better solution
+
     print("n is:  ", args.n)
     print("k is:  ", args.k)
-    print("random is:  ", random)
-    main(args.n, args.k, random)
+    print("random is:  ", bool(args.Random))
+    #main(args.n, args.k, bol(args.random))

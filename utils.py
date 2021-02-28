@@ -39,15 +39,8 @@ def eigengap(values):
         if temp > max:
             max = temp
             index = i
-    return index + 1
+    return index
 
-
-def create_cluster_vector(clusters, n, k):
-    vec = np.zeros(n)
-    for i in range(k):
-        for j in range(1, clusters[i * (n + 1)] + 1):
-            vec[clusters[i * (n + 1) + j]] = i + 1
-    return vec
 
 
 def save_data(vectors, clusters, d):
