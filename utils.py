@@ -34,7 +34,7 @@ def eigengap(values):
     sorted = np.sort(values)
     index = 0
     max = -1
-    for i in range(len(sorted) // 2):
+    for i in range(math.ceil(len(sorted) / 2)):
         temp = abs(sorted[i] - sorted[i + 1])
         if temp > max:
             max = temp
