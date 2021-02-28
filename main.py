@@ -61,8 +61,12 @@ def main(n, k, random):
     utils.write_to_file(second_f, x, obs_k, n)
     second_f.close()
 
+    # Calculate Jaccard measure
+    sjm = utils.jaccard_measure(clusters, spectral_clusters)
+    kjm = utils.jaccard_measure(clusters, kmeans_clusters)
+
     # Create pdf file
-    utils.save_to_pdf(vectors, spectral_clusters, kmeans_clusters, d, k, n, obs_k)
+    utils.save_to_pdf(vectors, spectral_clusters, kmeans_clusters, d, k, n, obs_k, sjm, kjm)
 
 
 # Compute Jaccard measure for both algo's and put in pdf

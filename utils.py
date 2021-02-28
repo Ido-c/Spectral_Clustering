@@ -55,11 +55,12 @@ def write_to_file(file, clusters, k, n):
         file.write(str(lst)[1: -1] + "\n")
 
 
-def jaccard_measure():
+def jaccard_measure(org, x):
+
     return
 
 
-def save_to_pdf(vectors, spectral, kmeans, dim, k, n, obs_k):
+def save_to_pdf(vectors, spectral, kmeans, dim, k, n, obs_k, sjm, kjm):
     fig = plt.figure()
     if dim == 3:
         plot1 = fig.add_subplot(221, projection='3d')
@@ -75,7 +76,8 @@ def save_to_pdf(vectors, spectral, kmeans, dim, k, n, obs_k):
     plot3.set_axis_off()
     text = "Data was generated from the values:\nn = " + str(n) \
            + " , k = " + str(k) + "\nThe k that was used for both algorithms was " + str(obs_k) \
-           + "\nThe Jaccard measure for Spectral clustering"
+           + "\nThe Jaccard measure for Spectral clustering: " + str(sjm) \
+           + "\nThe Jaccard measure for K-means: " + str(kjm)
     plot3.text(1.1, 0.6, text, ha="center")
     fig.savefig("clusters.pdf")
 
