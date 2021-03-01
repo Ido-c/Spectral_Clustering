@@ -1,45 +1,5 @@
-import math
 import numpy as np
-import errors
 from matplotlib import pyplot as plt
-
-
-def find_weight(x, y, dim):
-    dist = np.linalg.norm(x - y)
-    return math.exp(-(dist / 2))
-
-
-# Modified Gram-Shmidt
-def MGS(A, n):
-    U = A.copy()
-    R = np.zeros((n, n))
-    Q = np.zeros((n, n))
-    for i in range(n):
-        temp = np.linalg.norm(U[:, i])
-        R[i, i] = temp
-        if temp == 0:
-            errors.division_by_zero()  # todo errors
-            return
-        col = U[:, i] / temp
-        Q[:, i] = col
-        for j in range(i + 1, n):
-            Rij = col @ U[:, j]
-            R[i, j] = Rij
-            U[:, j] = U[:, j] - Rij * col
-    return Q, R
-
-
-# The Eigengap Heuristic
-def eigengap(values):
-    sorted = np.sort(values)
-    index = 0
-    max = -1
-    for i in range(math.ceil(len(sorted) / 2)):
-        temp = abs(sorted[i] - sorted[i + 1])
-        if temp > max:
-            max = temp
-            index = i
-    return index + 1
 
 
 def save_data(vectors, clusters, d):
@@ -80,18 +40,4 @@ def save_to_pdf(vectors, spectral, kmeans, dim, k, n, obs_k, sjm, kjm):
     fig.savefig("clusters.pdf")
 
 
-# QR iteration
-def QR_iteration_algorithm(A):
-    n = A.shape[0]  # A is (nxn)
-    Q_bar = np.identity(n)
-    for i in range(n):
-        Q, R = MGS(A, A.shape[0])
-        A = R @ Q
-        new_Q_bar = Q_bar @ Q
-        ep = (np.absolute(Q_bar) - np.absolute(new_Q_bar)).max()
-        if ep < 0.0001:
-            break
-        Q_bar = new_Q_bar
-        # we dont need the rest of A , so we return only the eigenvalues
-    eigenvalues = np.array([A[i, i] for i in range(n)], dtype=np.float64)
-    return eigenvalues, Q_bar
+
