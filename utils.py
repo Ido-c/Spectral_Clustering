@@ -51,6 +51,7 @@ def create_cluster_vector(clusters, n, k):
 
 
 def save_data(vectors, clusters, d):
+    # we use the built in numpy method for writing data , for that reason we need the clusters to be in the same ndarray
     data = np.column_stack((vectors, clusters))
     fmt = ("%f", "%f", "%f", "%d") if d == 3 else ("%f", "%f", "%d")
     np.savetxt("data.txt", data, delimiter=", ", fmt=fmt)
@@ -60,11 +61,6 @@ def write_to_file(file, clusters, k, n):
     for i in range(k):
         lst = [clusters[i * (n + 1) + j] for j in range(1, clusters[i * (n + 1)] + 1)]
         file.write(str(lst)[1: -1] + "\n")
-
-
-def jaccard_measure(org, x):
-
-    return
 
 
 def save_to_pdf(vectors, spectral, kmeans, dim, k, n, obs_k, sjm, kjm):
@@ -81,17 +77,19 @@ def save_to_pdf(vectors, spectral, kmeans, dim, k, n, obs_k, sjm, kjm):
         plot2.scatter(vectors[:, 0], vectors[:, 1], c=kmeans)
     plot3 = fig.add_subplot(2, 2, 3)
     plot3.set_axis_off()
-    text = "Data was generated from the values:\nn = " + str(n) \
-           + " , k = " + str(k) + "\nThe k that was used for both algorithms was " + str(obs_k) \
-           + "\nThe Jaccard measure for Spectral clustering: " + str(sjm) \
-           + "\nThe Jaccard measure for K-means: " + str(kjm)
-    plot3.text(1.1, 0.6, text, ha="center")
+    text = f"""Data was generated from the values:
+    n = {n:}, k = {k:}
+    The k that was used for both algorithms was {obs_k:}"
+    The Jaccard measure for Spectral clustering: {sjm:}
+    The Jaccard measure for K-means: {kjm:}
+    """
+    plot3.text(1.1, 0.4, text, ha="center")
     fig.savefig("clusters.pdf")
 
 
 # QR iteration
 def QR_iteration_algorithm(A):
-    n = A.shape[0]
+    n = A.shape[0]  # A is (nxn)
     Q_bar = np.identity(n)
     for i in range(n):
         Q, R = MGS(A, A.shape[0])
@@ -101,5 +99,6 @@ def QR_iteration_algorithm(A):
         if ep < 0.0001:
             break
         Q_bar = new_Q_bar
+        # we dont need the rest of A , so we return only the eigenvalues
     eigenvalues = np.array([A[i, i] for i in range(n)], dtype=np.float64)
     return eigenvalues, Q_bar

@@ -33,6 +33,4 @@ def k_means_pp(vectors, K, d, N, MAX_ITER):
     vectors = vectors.reshape(vectors.size)
     centroids = centroids.reshape(centroids.size)
     clusters = kmns.kmeans(K, N, d, MAX_ITER, list(vectors), list(centroids))  # todo
-    print("finished C")  # todo
-    print(clusters)  # todo
     return clusters
