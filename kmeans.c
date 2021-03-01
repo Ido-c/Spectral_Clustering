@@ -20,8 +20,8 @@ static double calcJaccard(long *, long *, int);
  * MAX_ITER - max number of iterations
  */
 static PyObject *kmeans(PyObject *self, PyObject *args) {
-    PyObject *temp_centroids, *temp_vectors, *item, *python_list, *python_int, *ext_list;
-    int k, n, d, MAX_ITER, i, tries, change, *p3, **clusters, temp_len;
+    PyObject *temp_centroids, *temp_vectors, *item, *python_list, *python_int, *ext_list, *inner_list, *cluster_list, *rtn_tup;
+    int k, n, d, MAX_ITER, i, j, tries, change, *p3, **clusters, temp_len;
     double *p1, *p2, **vectors, **centroids, *vecOfSums;
 
     if(!PyArg_ParseTuple(args, "iiiiOO", &k, &n, &d, &MAX_ITER, &temp_vectors, &temp_centroids)) {
@@ -128,11 +128,28 @@ static PyObject *kmeans(PyObject *self, PyObject *args) {
     }
 
     /*build python list from p3*/
-    python_list = PyList_New((k * (n + 1)));
-    for (i = 0; i < (k * (n + 1)); ++i){
-        python_int = Py_BuildValue("i", p3[i]);
-        PyList_SetItem(python_list, i, python_int);
+    ext_list = PyList_New(k);
+    for (i = 0; i < k; ++i){
+        temp_len = p3[i * (n + 1)];
+        inner_list = PyList_New(temp_len);
+        for (j = 0; j < temp_len; ++j){
+            python_int = Py_BuildValue("i", p3[i * (n + 1) + (j + 1)]);
+            PyList_SetItem(inner_list, j, python_int);
+        }
+        PyList_SetItem(ext_list, i, inner_list);
     }
+
+    cluster_list = PyList_New(n);
+    for (i = 0; i < k; ++i){
+        for (j = 1; j < p3[i * (n + 1)] + 1; ++j){
+            python_int = Py_BuildValue("i", i + 1);
+            PyList_SetItem(cluster_list, p3[i * (n + 1) + j], python_int);
+        }
+    }
+
+    rtn_tup = PyTuple_New(2);
+    PyTuple_SetItem(rtn_tup, 0, ext_list);
+    PyTuple_SetItem(rtn_tup, 1, cluster_list);
 
     free(centroids);
     free(vectors);
@@ -141,7 +158,7 @@ static PyObject *kmeans(PyObject *self, PyObject *args) {
     free(p2);
     free(p3);
     free(vecOfSums);
-    return python_list;
+    return rtn_tup;
 }
 
 /*calculates distance between to vectors
@@ -199,9 +216,6 @@ int findClosestCluster(double *x, double **centroids, int k, int d) {
 }
 
 
-#include <Python.h>
-
-
 static PyObject *jaccard(PyObject *self, PyObject *args) {
     PyObject *original, *new, *item;
     int n, i;
@@ -227,7 +241,6 @@ static PyObject *jaccard(PyObject *self, PyObject *args) {
         }
         corg[i] = PyLong_AsLong(item);
     }
-    printf("done corg");
 
     cnew = calloc(n, sizeof(long));
     if(!cnew) {
@@ -244,14 +257,10 @@ static PyObject *jaccard(PyObject *self, PyObject *args) {
         }
         cnew[i] = PyLong_AsLong(item);
     }
-    printf("done cnew");
 
     dist = calcJaccard(corg, cnew, n);
-    printf("calculated dist");
     free(corg);
-    printf("free corg");
     free(cnew);
-    printf("free cnew");
     if(dist == -1){
         PyErr_SetString(PyExc_ValueError, "division by zero"); //todo
         return NULL;
@@ -264,7 +273,6 @@ static double calcJaccard(long *a, long *b, int n){
     double dist, both, any;
     both = 0;
     any = 0;
-    printf("started calc");
     for(i=0; i < n; i++){
         for(j=i+1; j < n; j++){
             sameA = a[i] == a[j];
@@ -273,13 +281,13 @@ static double calcJaccard(long *a, long *b, int n){
             if(sameA == 1 || sameB == 1){any++;}
         }
     }
-    printf("done calc");
     if(any == 0){
         return -1;
     }
     dist = both/any;
     return dist;
 }
+
 
 /*module definition starts here*/
 

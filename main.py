@@ -36,38 +36,34 @@ def main(n, k, random):
         return
 
     # Print max capacity
-    print(f"max capacity of k :{MAX_CAP_K}"
+    print(f"max capacity of k :{MAX_CAP_K}\n"
           f"max capacity of n : {MAX_CAP_N}")
 
     # Generate random data with indexed data points
     vectors, clusters = make_blobs(n_samples=n, n_features=d, centers=k)
-    print("the sizes of the real clusters : ", [len(clusters[clusters == i]) for i in range(k)])
     # Create 1st txt file
     utils.save_data(vectors, clusters, d)
 
     # Run Spectral Clustering and put clusters in 2nd file
-    print("k is", k)
-    x, obs_k = spectral_clustering.spectral_clustering(vectors, n, d)  # todo erase x, k
-    spectral_clusters = utils.create_cluster_vector(x, n, obs_k)
+    s_clstr_to_vec, s_vec_to_clstr, obs_k = spectral_clustering.spectral_clustering(vectors, n, d)  # todo erase x, k
 
     # Create 2nd txt file and write K in it
     second_f = open('clusters.txt', 'w+')
     second_f.write(str(obs_k) + "\n")
-    utils.write_to_file(second_f, x, obs_k, n)
+    utils.write_to_file(second_f, s_clstr_to_vec, obs_k)
 
     # Run Kmeanspp and put clusters in 2nd file
-    x = kmeans_pp.k_means_pp(vectors, obs_k, d, n, 300)
-    kmeans_clusters = utils.create_cluster_vector(x, n, obs_k)
-    utils.write_to_file(second_f, x, obs_k, n)
+    k_clstr_to_vec, k_vec_to_clstr = kmeans_pp.k_means_pp(vectors, obs_k, d, n, 300)
+    utils.write_to_file(second_f, k_clstr_to_vec, obs_k)
     second_f.close()
 
     # Calculate Jaccard measure
     temp = clusters.tolist()
-    sjm = kmns.jaccard(temp, spectral_clusters.tolist())
-    kjm = kmns.jaccard(temp, kmeans_clusters.tolist())
+    sjm = kmns.jaccard(temp, s_vec_to_clstr)
+    kjm = kmns.jaccard(temp, k_vec_to_clstr)
 
     # Create pdf file
-    utils.save_to_pdf(vectors, spectral_clusters, kmeans_clusters, d, k, n, obs_k, sjm, kjm)
+    utils.save_to_pdf(vectors, s_vec_to_clstr, k_vec_to_clstr, d, k, n, obs_k, sjm, kjm)
 
 
 if __name__ == "__main__":
@@ -77,7 +73,4 @@ if __name__ == "__main__":
     parser.add_argument('--Random', help="random k and n", default=True, action='store_false')
     args = parser.parse_args()
 
-    print("n is:  ", args.n)
-    print("k is:  ", args.k)
-    print("random is:  ", bool(args.Random))
     main(args.n, args.k, args.Random)

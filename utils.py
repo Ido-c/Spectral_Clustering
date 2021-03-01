@@ -42,14 +42,6 @@ def eigengap(values):
     return index + 1
 
 
-def create_cluster_vector(clusters, n, k):
-    vec = np.zeros(n, dtype=np.int)
-    for i in range(k):
-        for j in range(1, clusters[i * (n + 1)] + 1):
-            vec[clusters[i * (n + 1) + j]] = i + 1
-    return vec
-
-
 def save_data(vectors, clusters, d):
     # we use the built in numpy method for writing data , for that reason we need the clusters to be in the same ndarray
     data = np.column_stack((vectors, clusters))
@@ -57,10 +49,9 @@ def save_data(vectors, clusters, d):
     np.savetxt("data.txt", data, delimiter=", ", fmt=fmt)
 
 
-def write_to_file(file, clusters, k, n):
+def write_to_file(file, clusters, k):
     for i in range(k):
-        lst = [clusters[i * (n + 1) + j] for j in range(1, clusters[i * (n + 1)] + 1)]
-        file.write(str(lst)[1: -1] + "\n")
+        file.write(str(clusters[i])[1: -1] + "\n")
 
 
 def save_to_pdf(vectors, spectral, kmeans, dim, k, n, obs_k, sjm, kjm):
