@@ -21,7 +21,7 @@ def run(c, k, n, Random=False):
     """the program generate n random 2d or 3d vectors distributed to k clusters then finds the clusters using both
     spectral clustering and the k-means++ algorithm finally it wright the results in a txt file and return a PDF file
     with the visualisation of the results and the juccrd measure of both algorithms 
-    """#todo chek with ido
+    """#todo check with ido
     c.run("python setup.py build_ext --inplace")  # todo write python3.8.5 insted
     c.run("python main.py {n:} {k:} {random:}".format(n=n, k=k, random=("--Random" if Random else "")))  # # todo write python3.8.5 insted
 

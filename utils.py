@@ -39,7 +39,7 @@ def eigengap(values):
         if temp > max:
             max = temp
             index = i
-    return index
+    return index + 1
 
 
 def create_cluster_vector(clusters, n, k):
@@ -75,11 +75,13 @@ def save_to_pdf(vectors, spectral, kmeans, dim, k, n, obs_k, sjm, kjm):
         plot2 = fig.add_subplot(222)
         plot1.scatter(vectors[:, 0], vectors[:, 1], c=spectral)
         plot2.scatter(vectors[:, 0], vectors[:, 1], c=kmeans)
+    plot1.title.set_text('Normalized Spectral Clustering')
+    plot2.title.set_text('K-means')
     plot3 = fig.add_subplot(2, 2, 3)
     plot3.set_axis_off()
     text = f"""Data was generated from the values:
     n = {n:}, k = {k:}
-    The k that was used for both algorithms was {obs_k:}"
+    The k that was used for both algorithms was {obs_k:}
     The Jaccard measure for Spectral clustering: {sjm:}
     The Jaccard measure for K-means: {kjm:}
     """

@@ -20,8 +20,8 @@ static double calcJaccard(long *, long *, int);
  * MAX_ITER - max number of iterations
  */
 static PyObject *kmeans(PyObject *self, PyObject *args) {
-    PyObject *temp_centroids, *temp_vectors, *item, *python_list, *python_int;
-    int k, n, d, MAX_ITER, i, j, tries, change, *p3, **clusters, temp_len;
+    PyObject *temp_centroids, *temp_vectors, *item, *python_list, *python_int, *ext_list;
+    int k, n, d, MAX_ITER, i, tries, change, *p3, **clusters, temp_len;
     double *p1, *p2, **vectors, **centroids, *vecOfSums;
 
     if(!PyArg_ParseTuple(args, "iiiiOO", &k, &n, &d, &MAX_ITER, &temp_vectors, &temp_centroids)) {
@@ -204,7 +204,7 @@ int findClosestCluster(double *x, double **centroids, int k, int d) {
 
 static PyObject *jaccard(PyObject *self, PyObject *args) {
     PyObject *original, *new, *item;
-    int n, nn, i;
+    int n, i;
     long *corg, *cnew;
     double dist;
 
@@ -213,9 +213,6 @@ static PyObject *jaccard(PyObject *self, PyObject *args) {
     }
 
     n = PyObject_Length(original);
-    nn = PyObject_Length(new);
-    printf("\nn = %d\n\n", n);
-    printf("nn = %d\n\n", nn);
 
     corg = calloc(n, sizeof(long));
     if(!corg) {
@@ -234,6 +231,7 @@ static PyObject *jaccard(PyObject *self, PyObject *args) {
 
     cnew = calloc(n, sizeof(long));
     if(!cnew) {
+        free(corg);
         return PyErr_NoMemory();
     }
     for(i=0; i < n; i++) {
@@ -255,24 +253,24 @@ static PyObject *jaccard(PyObject *self, PyObject *args) {
     free(cnew);
     printf("free cnew");
     if(dist == -1){
-        PyErr_SetString(PyExc_ValueError, "division by zero");
+        PyErr_SetString(PyExc_ValueError, "division by zero"); //todo
         return NULL;
     }
     return Py_BuildValue("f", dist);
 }
 
 static double calcJaccard(long *a, long *b, int n){
-    int i, j, both, any, sameA, sameB;
-    double dist;
+    int i, j, sameA, sameB;
+    double dist, both, any;
     both = 0;
     any = 0;
     printf("started calc");
     for(i=0; i < n; i++){
         for(j=i+1; j < n; j++){
             sameA = a[i] == a[j];
-            sameB = b[i] == a[j];
-            if(sameA == sameB == 1){both += 1;}
-            if(sameA == 1 || sameB == 1){any += 1;}
+            sameB = b[i] == b[j];
+            if(sameA == 1 && sameB == 1){both++;}
+            if(sameA == 1 || sameB == 1){any++;}
         }
     }
     printf("done calc");
