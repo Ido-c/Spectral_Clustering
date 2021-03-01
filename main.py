@@ -5,6 +5,7 @@ from sklearn.datasets import make_blobs
 import utils
 import spectral_clustering
 import kmeans_pp
+import mykmeanssp as kmns
 
 '''
 maxcap
@@ -62,8 +63,8 @@ def main(n, k, random):
     second_f.close()
 
     # Calculate Jaccard measure
-    sjm = utils.jaccard_measure(clusters, spectral_clusters)
-    kjm = utils.jaccard_measure(clusters, kmeans_clusters)
+    sjm = kmns.jaccard(clusters, spectral_clusters)
+    kjm = kmns.jaccard(clusters, kmeans_clusters)
 
     # Create pdf file
     utils.save_to_pdf(vectors, spectral_clusters, kmeans_clusters, d, k, n, obs_k, sjm, kjm)
@@ -84,4 +85,5 @@ if __name__ == "__main__":
     print("n is:  ", args.n)
     print("k is:  ", args.k)
     print("random is:  ", bool(args.Random))
-    #main(args.n, args.k, bol(args.random))
+    main(args.n, args.k, args.Random)
+
