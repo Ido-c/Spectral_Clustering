@@ -59,8 +59,9 @@ def main(n, k, random):
     second_f.close()
 
     # Calculate Jaccard measure
-    sjm = kmns.jaccard(clusters, spectral_clusters)
-    kjm = kmns.jaccard(clusters, kmeans_clusters)
+    temp = clusters.tolist()
+    sjm = kmns.jaccard(temp, spectral_clusters.tolist())
+    kjm = kmns.jaccard(temp, kmeans_clusters.tolist())
 
     # Create pdf file
     utils.save_to_pdf(vectors, spectral_clusters, kmeans_clusters, d, k, n, obs_k, sjm, kjm)

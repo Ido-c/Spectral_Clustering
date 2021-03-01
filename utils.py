@@ -43,7 +43,7 @@ def eigengap(values):
 
 
 def create_cluster_vector(clusters, n, k):
-    vec = np.zeros(n)
+    vec = np.zeros(n, dtype=np.int)
     for i in range(k):
         for j in range(1, clusters[i * (n + 1)] + 1):
             vec[clusters[i * (n + 1) + j]] = i + 1

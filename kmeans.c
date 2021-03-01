@@ -10,6 +10,8 @@ int updateCentroid(int *clusterVec, double *centroidVec, double **allVecs, int d
 
 double getDistance(double *vec1, double *vec2, int d);
 
+static double calcJaccard(long *, long *, int);
+
 /*
  * arguments:
  * k - number of clusters
@@ -197,6 +199,90 @@ int findClosestCluster(double *x, double **centroids, int k, int d) {
 }
 
 
+#include <Python.h>
+
+
+static PyObject *jaccard(PyObject *self, PyObject *args) {
+    PyObject *original, *new, *item;
+    int n, nn, i;
+    long *corg, *cnew;
+    double dist;
+
+    if(!PyArg_ParseTuple(args, "OO",&original, &new)) {
+        return NULL;
+    }
+
+    n = PyObject_Length(original);
+    nn = PyObject_Length(new);
+    printf("\nn = %d\n\n", n);
+    printf("nn = %d\n\n", nn);
+
+    corg = calloc(n, sizeof(long));
+    if(!corg) {
+        return PyErr_NoMemory();
+    }
+    for(i=0; i < n; i++) {
+        item = PyList_GetItem(original, i);
+        if (!PyLong_Check(item)){
+            free(corg);
+            PyErr_SetString(PyExc_TypeError, "not all elements in list are ints");
+            return NULL;
+        }
+        corg[i] = PyLong_AsLong(item);
+    }
+    printf("done corg");
+
+    cnew = calloc(n, sizeof(long));
+    if(!cnew) {
+        return PyErr_NoMemory();
+    }
+    for(i=0; i < n; i++) {
+        item = PyList_GetItem(new, i);
+        if (!PyLong_Check(item)){
+            free(cnew);
+            free(corg);
+            PyErr_SetString(PyExc_TypeError, "not all elements in list are ints");
+            return NULL;
+        }
+        cnew[i] = PyLong_AsLong(item);
+    }
+    printf("done cnew");
+
+    dist = calcJaccard(corg, cnew, n);
+    printf("calculated dist");
+    free(corg);
+    printf("free corg");
+    free(cnew);
+    printf("free cnew");
+    if(dist == -1){
+        PyErr_SetString(PyExc_ValueError, "division by zero");
+        return NULL;
+    }
+    return Py_BuildValue("f", dist);
+}
+
+static double calcJaccard(long *a, long *b, int n){
+    int i, j, both, any, sameA, sameB;
+    double dist;
+    both = 0;
+    any = 0;
+    printf("started calc");
+    for(i=0; i < n; i++){
+        for(j=i+1; j < n; j++){
+            sameA = a[i] == a[j];
+            sameB = b[i] == a[j];
+            if(sameA == sameB == 1){both += 1;}
+            if(sameA == 1 || sameB == 1){any += 1;}
+        }
+    }
+    printf("done calc");
+    if(any == 0){
+        return -1;
+    }
+    dist = both/any;
+    return dist;
+}
+
 /*module definition starts here*/
 
 static PyMethodDef kmeansMethods[] = {
@@ -204,6 +290,10 @@ static PyMethodDef kmeansMethods[] = {
       (PyCFunction) kmeans,
       METH_VARARGS,
       PyDoc_STR("K means clustering algorithm")},
+     {"jaccard",
+      (PyCFunction) jaccard,
+      METH_VARARGS,
+      PyDoc_STR("calculate Jaccard distance")},
     {NULL, NULL, 0, NULL}
 };
 
