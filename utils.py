@@ -1,6 +1,12 @@
 import numpy as np
 from matplotlib import pyplot as plt
 
+'''
+Utilities file used by main
+
+Contains methods for interacting with files 
+'''
+
 
 def save_data(vectors, clusters, d):
     # we use the built in numpy method for writing data , for that reason we need the clusters to be in the same ndarray

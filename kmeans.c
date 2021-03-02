@@ -216,6 +216,15 @@ int findClosestCluster(double *x, double **centroids, int k, int d) {
 }
 
 
+/*
+ * calculates the Jaccard measure for two given list representing the cluster allocation of vectors
+ *
+ * arguments:
+ * original - 1st list of indices
+ * new - 2nd list of indices
+ *
+ * output: the Jaccard distance (pairs in both lists / pairs in either list)
+ */
 static PyObject *jaccard(PyObject *self, PyObject *args) {
     PyObject *original, *new, *item;
     int n, i;
@@ -268,6 +277,8 @@ static PyObject *jaccard(PyObject *self, PyObject *args) {
     return Py_BuildValue("f", dist);
 }
 
+/*calculate Jaccard distance - used by jaccard function
+returns -1 if no pairs found */
 static double calcJaccard(long *a, long *b, int n){
     int i, j, sameA, sameB;
     double dist, both, any;
