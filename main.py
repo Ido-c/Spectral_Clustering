@@ -32,6 +32,21 @@ clusters.txt - contains the clusters computed by the different algorithms
 '''
 
 
+# argument assertion function
+def assert_args(n, k):
+    flag = False
+    if k >= n:
+        print("# of clusters must be smaller than # of points")
+        flag = True
+    if k <= 0:
+        print("# of clusters must be a positive non-zero number")
+        flag = True
+    if n <= 0:
+        print("# of points must be a positive non-zero number")
+        flag = True
+    return flag
+
+
 def main(n, k, random):
     if random:  # values for k & n are chosen at random from range [max_capacity/2, max_capacity]
         k = np.random.randint(MAX_CAP_K // 2, MAX_CAP_K + 1)
@@ -79,15 +94,4 @@ if __name__ == "__main__":
     main(args.n, args.k, args.Random)
 
 
-def assert_args(n, k):
-    flag = False
-    if k >= n:
-        print("# of clusters must be smaller than # of points")
-        flag = True
-    if k <= 0:
-        print("# of clusters must be a positive non-zero number")
-        flag = True
-    if n <= 0:
-        print("# of points must be a positive non-zero number")
-        flag = True
-    return flag
+
