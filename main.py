@@ -6,7 +6,7 @@ from spectral_clustering import spectral_clustering
 from kmeans_pp import k_means_pp
 import mykmeanssp as kmns
 
-MAX_CAP_N = 200
+MAX_CAP_N = 250
 MAX_CAP_K = 10
 
 '''
@@ -14,7 +14,7 @@ Main module of program.
 Program computes ond compares Kmeans clustering vs. Spectral clustering for variables given by user.
 
 Max capacity for n and k are the values for which the program does not a accede running time of 5 minutes on nova
-n = 200, k = 10
+n = 250, k = 10
 
 arguments:
 n - # of vectors
