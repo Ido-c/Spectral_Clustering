@@ -1,14 +1,24 @@
 import mykmeanssp as kmns
 import numpy as np
 
+'''
+K-means clustering algorithm
 
+arguments:
+vectors - list of vectors to be clustered
+K - desired # of clusters
+d - dim of vectors
+N - # of vectors
+MAX-ITER - maximum number of iterations for the algorithm
+
+returns tuple "clusters" containing:
+    clusters[0] - list of lists. each list contains the indices of vectors assigned to the cluster
+        eg. clusters[0][0][0] is the index of the first vector in the first cluster
+    clusters[1] - list of indices mapping each vector to its assigned cluster
+        eg. clusters[1][5] is the cluster number to which the 6th vector was assigned
+'''
 def k_means_pp(vectors, K, d, N, MAX_ITER):
-    """variables are:
-    centroids_count : count hpe many centroids have been calculated
-    distance : the distance from each vector to the closest centroid
-    centroid_indices : ndarry containing the indices of the vectors chosen to be centroids
-    centroids : ndarray containing the vectors chosen to be centroids
-    """
+
     np.random.seed(0)  # pick the seed val to be 0
     # indices = np.arange(N)
     centroids_count = 1
