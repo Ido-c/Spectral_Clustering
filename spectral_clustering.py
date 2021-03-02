@@ -2,18 +2,18 @@ import numpy as np
 import kmeans_pp
 import math
 
+
 # Form the Weighted Adjacency Matrix W
 def spectral_clustering(vectors, n, dim):
-
     # Create the weighted adjacency matrix
-    WAM = np.zeros((n, n), dtype=np.float)
+    WAM = np.zeros((n, n), dtype=np.float32)
     for i in range(n):
         for j in range(i + 1, n):
             WAM[i, j] = find_weight(vectors[i], vectors[j], dim)
     WAM = WAM + WAM.T
 
     # Compute the Diagonal Degree Matrix ^0.5
-    DDM = np.zeros((n, n), dtype=np.float)
+    DDM = np.zeros((n, n), dtype=np.float32)
     for i in range(n):
         DDM[i, i] = np.sum(WAM[i]) ** (-0.5)
 
@@ -46,9 +46,6 @@ def MGS(A, n):
     for i in range(n):
         temp = np.linalg.norm(U[:, i])
         R[i, i] = temp
-        if temp == 0:
-            errors.division_by_zero()  # todo errors
-            return
         col = U[:, i] / temp
         Q[:, i] = col
         for j in range(i + 1, n):
@@ -58,7 +55,16 @@ def MGS(A, n):
     return Q, R
 
 
-# QR iteration
+'''
+QR iteration
+
+arguments :
+A- a 2D matrix
+
+returns a tuple with 2 values
+[0]  1D array of the eigenvalues of A
+[1] 2D array the eigenvectors so that the eigenvectors[i] has the eigenvalue[i] 
+'''
 def QR_iteration_algorithm(A):
     n = A.shape[0]  # A is (nxn)
     Q_bar = np.identity(n)
@@ -74,7 +80,15 @@ def QR_iteration_algorithm(A):
     eigenvalues = np.array([A[i, i] for i in range(n)], dtype=np.float64)
     return eigenvalues, Q_bar
 
+'''
+find_weight
 
+arguments: 
+x,y - vectors 
+dim - the dimension of x and y
+
+:returns the 
+'''
 def find_weight(x, y, dim):
     dist = np.linalg.norm(x - y)
     return math.exp(-(dist / 2))
@@ -82,12 +96,12 @@ def find_weight(x, y, dim):
 
 # The Eigengap Heuristic
 def eigengap(values):
-    sorted = np.sort(values)
+    sorted_val = np.sort(values)
     index = 0
-    max = -1
-    for i in range(math.ceil(len(sorted) / 2)):
-        temp = abs(sorted[i] - sorted[i + 1])
-        if temp > max:
-            max = temp
+    maximum = -1
+    for i in range(math.ceil(len(sorted_val) / 2)):
+        temp = abs(sorted_val[i] - sorted_val[i + 1])
+        if temp > maximum:
+            maximum = temp
             index = i
     return index + 1

@@ -13,7 +13,7 @@ def k_means_pp(vectors, K, d, N, MAX_ITER):
     # indices = np.arange(N)
     centroids_count = 1
 
-    centroid_indices = np.zeros(K, dtype=np.int64)
+    centroid_indices = np.zeros(K, dtype=np.int16)
     centroid_indices[0] = np.random.choice(N, 1)
     centroids = np.zeros((K, d), dtype=np.float64)
 

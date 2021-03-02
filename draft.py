@@ -16,6 +16,10 @@ def usles(x):
 # A = np.array([0, 12, 3, 4, 5, 6, 7, 8, 9],dtype=np.float64).reshape(3, 3)
 # x = QR_iteration_algorithm(A)
 # print(x)
+
+
+x= 28/25
+print(x*(25+20+21)+(16/25)*(16))
 fig = plt.figure()
 plot1 = fig.add_subplot(122)
 plot1.plot(range(10))
