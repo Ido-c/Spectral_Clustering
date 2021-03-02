@@ -2,8 +2,8 @@ import argparse
 import numpy as np
 from sklearn.datasets import make_blobs
 import utils
-import spectral_clustering
-import kmeans_pp
+from spectral_clustering import spectral_clustering
+from kmeans_pp import k_means_pp
 import mykmeanssp as kmns
 
 MAX_CAP_N = 200
@@ -60,21 +60,18 @@ def main(n, k, random):
 
     # Generate random data with indexed data points
     vectors, clusters = make_blobs(n_samples=n, n_features=d, centers=k)
-    # Create 1st txt file
+
+    # Create 1st txt file and save randomized data
     utils.save_data(vectors, clusters, d)
 
-    # Run Spectral Clustering and put clusters in 2nd file
-    s_clstr_to_vec, s_vec_to_clstr, obs_k = spectral_clustering.spectral_clustering(vectors, n, d)  # todo erase x, k
+    # Run Spectral Clustering
+    s_clstr_to_vec, s_vec_to_clstr, obs_k = spectral_clustering(vectors, n)
 
-    # Create 2nd txt file and write K in it
-    second_f = open('clusters.txt', 'w+')
-    second_f.write(str(obs_k) + "\n")
-    utils.write_to_file(second_f, s_clstr_to_vec, obs_k)
+    # Run K_means
+    k_clstr_to_vec, k_vec_to_clstr = k_means_pp(vectors, obs_k, d, n, 300)
 
-    # Run Kmeanspp and put clusters in 2nd file
-    k_clstr_to_vec, k_vec_to_clstr = kmeans_pp.k_means_pp(vectors, obs_k, d, n, 300)
-    utils.write_to_file(second_f, k_clstr_to_vec, obs_k)
-    second_f.close()
+    # Create 2nd txt file with clusters from both algorithms
+    utils.write_to_file(s_clstr_to_vec, k_clstr_to_vec, obs_k)
 
     # Calculate Jaccard measure
     temp = clusters.tolist()

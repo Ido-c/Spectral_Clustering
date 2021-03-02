@@ -3,28 +3,26 @@ import kmeans_pp
 import math
 
 
-'''
-Spectral clustering algorithm
+def spectral_clustering(vectors, n):
+    """
+    Spectral clustering algorithm
 
-arguments:
-vectors - list of vectors to be clustered
-n - # of vectors
-dim - dim of vectors
+    arguments:
+    vectors - list of vectors to be clustered
+    n - # of vectors
 
-returns tuple "clusters" containing:
-    clusters[0] - list of lists. each list contains the indices of vectors assigned to the cluster
-        eg. clusters[0][0][0] is the index of the first vector in the first cluster
-    clusters[1] - list of indices mapping each vector to its assigned cluster
-        eg. clusters[1][5] is the cluster number to which the 6th vector was assigned
-    clusters[2] - ideal # of clusters (k) as calculated using the Eigengap Heuristic 
-'''
-
-def spectral_clustering(vectors, n, dim):
+    returns tuple "clusters" containing:
+        clusters[0] - list of lists. each list contains the indices of vectors assigned to the cluster
+            eg. clusters[0][0][0] is the index of the first vector in the first cluster
+        clusters[1] - list of indices mapping each vector to its assigned cluster
+            eg. clusters[1][5] is the cluster number to which the 6th vector was assigned
+        clusters[2] - ideal # of clusters (k) as calculated using the Eigengap Heuristic
+    """
     # Create the weighted adjacency matrix
     WAM = np.zeros((n, n), dtype=np.float32)
     for i in range(n):
         for j in range(i + 1, n):
-            WAM[i, j] = find_weight(vectors[i], vectors[j], dim)
+            WAM[i, j] = find_weight(vectors[i], vectors[j])
     WAM = WAM + WAM.T
 
     # Compute the Diagonal Degree Matrix ^0.5
@@ -52,17 +50,18 @@ def spectral_clustering(vectors, n, dim):
 
     return clstr_to_vec, vec_to_clstr, k
 
-'''
-Modified Gram-Shmidt Algorithm
 
-arguments:
-A - a matrix of size n*n
-
-returns a tuple containing a decomposition of A into two matrices, Q and R, where A = QR and:
-    1. Q is orthogonal matrix Q 
-    2. R is upper triangular
-'''
 def MGS(A):
+    """
+    Modified Gram-Shmidt algorithm
+
+    arguments:
+    A - a matrix of size n*n
+
+    returns a tuple containing a decomposition of A into two matrices, Q and R, where A = QR and:
+        [0] Q is orthogonal
+        [1] R is upper triangular
+    """
     n = A.shape[0]
     U = A.copy()
     R = np.zeros((n, n))
@@ -79,17 +78,17 @@ def MGS(A):
     return Q, R
 
 
-'''
-QR iteration
-
-arguments :
-A- a 2D matrix
-
-returns a tuple with 2 values
-[0]  1D array of the eigenvalues of A
-[1] 2D array the eigenvectors so that the eigenvectors[i] has the eigenvalue[i] 
-'''
 def QR_iteration_algorithm(A):
+    """
+    QR iteration algorithm - finds eigenvalues and eigenvectors for A
+
+    arguments:
+        A - a matrix of size n*n
+
+    returns a tuple (eigenvalues, Q_bar) containing:
+        [0] 1D array of the eigenvalues of A
+        [1] 2D array of eigenvectors so that Q_bar[i] belongs to the value at eigenvalues[i]
+    """
     n = A.shape[0]  # A is (nxn)
     Q_bar = np.identity(n)
     for i in range(n):
@@ -104,22 +103,32 @@ def QR_iteration_algorithm(A):
     eigenvalues = np.array([A[i, i] for i in range(n)], dtype=np.float64)
     return eigenvalues, Q_bar
 
-'''
-find_weight
 
-arguments: 
-x,y - vectors 
-dim - the dimension of x and y
+def find_weight(x, y):
+    """
+    find weight
 
-:returns the 
-'''
-def find_weight(x, y, dim):
+    arguments:
+        x, y - vectors
+
+    returns the product of the following function:
+        exp{-||x - y||/2) where ||x|| is the Euclidean norm
+    """
     dist = np.linalg.norm(x - y)
     return math.exp(-(dist / 2))
 
 
 # The Eigengap Heuristic
 def eigengap(values):
+    """
+    eigengap - finds the ideal # of clusters (k) for the clustering algorithm
+
+    arguments:
+        a list of eigenvalues (floats)
+
+    returns k using the following logic:
+        argmax_i(delta_i) where delta_i = abs(values[i] - values[i+1])
+    """
     sorted_val = np.sort(values)
     index = 0
     maximum = -1
@@ -128,4 +137,4 @@ def eigengap(values):
         if temp > maximum:
             maximum = temp
             index = i
-    return index + 1
+    return index + 1  # +1 because arguments start from zero

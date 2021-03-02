@@ -217,7 +217,7 @@ int findClosestCluster(double *x, double **centroids, int k, int d) {
 
 
 /*
- * calculates the Jaccard measure for two given list representing the cluster allocation of vectors
+ * calculates the Jaccard measure for two given lists representing the cluster allocation of vectors
  *
  * arguments:
  * original - 1st list of indices
