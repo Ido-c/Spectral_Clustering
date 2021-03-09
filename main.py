@@ -89,7 +89,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('n', type=int, help="# of vectors")
     parser.add_argument('k', type=int, help="# of clusters")
-    parser.add_argument('--Random', help="random k and n", default=True, action='store_false')
+    parser.add_argument('--Random', help="random k and n", default=False, action='store_true')
     args = parser.parse_args()
     main(args.n, args.k, args.Random)
 
