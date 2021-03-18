@@ -78,6 +78,57 @@ def MGS(A):
     return Q, R
 
 
+def MGS_opt(A):
+    """
+    Modified Gram-Shmidt algorithm
+
+    arguments:
+    A - a matrix of size n*n
+
+    returns a tuple containing a decomposition of A into two matrices, Q and R, where A = QR and:
+        [0] Q is orthogonal
+        [1] R is upper triangular
+    """
+    n = A.shape[0]
+    U = A.copy()
+    R = np.zeros((n, n))
+    Q = np.zeros((n, n))
+
+    for i in range(n):
+        temp = np.linalg.norm(U[:, i])
+        R[i, i] = temp
+        col = U[:, i] / temp
+        Q[:, i] = col
+        R[i, i + 1:] = col @ U[:, i + 1:]
+        U = U - (R[i, :][:, np.newaxis] * col).T
+        if np.isnan(R).any() or np.isnan(U).any() or np.isnan(Q).any():
+            print(f"found nan in iteration :{i}")
+    return Q, R
+
+
+def MGS_opt2(A):
+    U = A.astype('float64').copy()
+    n = A.shape[0]  # size of matrix A
+
+    R = np.zeros([n, n])
+    Q = np.zeros([n, n])
+    Z = np.zeros([n, n])
+
+    for i in range(n):
+        R[i, i] = (np.linalg.norm(U[:, i]))
+        if R[i, i] == 0:
+            print("zero division")  # todo: exit with error message
+        Q[:, i] = U[:, i] / R[i, i]
+        R[i, i + 1:] = Q[:, i].T @ U[:, i + 1:]
+
+        if i < n - 1:
+            Z[:, i + 1:] = Q[:, i, np.newaxis] @ R[np.newaxis, i, i + 1:]
+            U -= Z
+            Z[:, i + 1] = 0
+
+    return Q, R
+
+
 def QR_iteration_algorithm(A):
     """
     QR iteration algorithm - finds eigenvalues and eigenvectors for A
@@ -93,6 +144,10 @@ def QR_iteration_algorithm(A):
     Q_bar = np.identity(n)
     for i in range(n):
         Q, R = MGS(A)
+        Q, R = MGS_opt(A)  # todo check with ido
+        Q2, R2 = MGS_opt2(A)  # todo check with ido
+        print(f"the diffrence is  :  Q {(Q - Q2).max()}"
+              f"R :  {(R - R2).max()} ")
         A = R @ Q
         new_Q_bar = Q_bar @ Q
         ep = (np.absolute(Q_bar) - np.absolute(new_Q_bar)).max()
@@ -133,7 +188,7 @@ def eigengap(values):
     index = 0
     maximum = -1
     for i in range(math.ceil(len(sorted_val) / 2)):
-        temp = abs(sorted_val[i] - sorted_val[i + 1])
+        temp = sorted_val[i + 1] - sorted_val[i]
         if temp > maximum:
             maximum = temp
             index = i
