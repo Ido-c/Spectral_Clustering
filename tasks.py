@@ -26,7 +26,7 @@ def run(c, k, n, Random=True):
     c.run("python main.py {n:} {k:} {random:}".format(n=n, k=k, random=("--Random" if Random else "")))  # # todo write python3.8.5 insted
 
 
-@task(name='find_critical', aliases='find', )
+@task(name='find_critical', aliases='find')
 def nk_find(c):
     res = {}
     for k in range(2, 11):

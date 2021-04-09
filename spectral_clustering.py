@@ -143,11 +143,11 @@ def QR_iteration_algorithm(A):
     n = A.shape[0]  # A is (nxn)
     Q_bar = np.identity(n)
     for i in range(n):
-        Q, R = MGS(A)
+        #Q, R = MGS(A)
         Q, R = MGS_opt(A)  # todo check with ido
-        Q2, R2 = MGS_opt2(A)  # todo check with ido
-        print(f"the diffrence is  :  Q {(Q - Q2).max()}"
-              f"R :  {(R - R2).max()} ")
+        # Q2, R2 = MGS_opt2(A)  # todo check with ido
+        # print(f"the diffrence is  :  Q {(Q - Q2).max()}"
+        #       f"R :  {(R - R2).max()} ")
         A = R @ Q
         new_Q_bar = Q_bar @ Q
         ep = (np.absolute(Q_bar) - np.absolute(new_Q_bar)).max()
