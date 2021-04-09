@@ -22,8 +22,10 @@ def spectral_clustering(vectors, n):
     WAM = np.zeros((n, n), dtype=np.float32)
     for i in range(n):
         for j in range(i + 1, n):
-            WAM[i, j] = find_weight(vectors[i], vectors[j])
-    WAM = WAM + WAM.T
+            temp = find_weight(vectors[i], vectors[j])
+            WAM[i, j] = temp
+            WAM[j, i] = temp
+    # WAM = WAM + WAM.T
 
     # Compute the Diagonal Degree Matrix ^0.5
     DDM = np.zeros((n, n), dtype=np.float32)
@@ -76,7 +78,7 @@ def MGS(A):
             R[i, j] = Rij
             U[:, j] = U[:, j] - Rij * col
     return Q, R
-
+    #todo division by error
 
 def MGS_opt(A):
     """
@@ -101,7 +103,7 @@ def MGS_opt(A):
         Q[:, i] = col
         R[i, i + 1:] = col @ U[:, i + 1:]
         U = U - (R[i, :][:, np.newaxis] * col).T
-        if np.isnan(R).any() or np.isnan(U).any() or np.isnan(Q).any():
+        if np.isnan(R).any() or np.isnan(U).any() or np.isnan(Q).any(): # todo remove
             print(f"found nan in iteration :{i}")
     return Q, R
 

@@ -32,6 +32,17 @@ clusters.txt - contains the clusters computed by the different algorithms
 '''
 
 
+# todo nk message in beginning
+# todo errors
+# todo remove unnecessary tasks
+# todo find and add final n, k
+# todo remove redundant MGS methods
+# todo check tasks documentation
+# todo tasks - change to python 3.8.5
+# todo check no todo's left
+# todo run one last time
+
+
 # argument assertion function
 def assert_args(n, k):
     flag = False

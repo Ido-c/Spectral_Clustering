@@ -2,26 +2,19 @@ from invoke import task
 import time
 
 
-@task
-def build(c):
-    c.run("python3.8.5 setup.py build_ext --inplace")
-
-
-@task(aliases=['del'])
-def delete(c):
-    c.run("rm *mykmeanssp*.pyd")
-
-
 @task(post=[delete], name='run',
       help={
           "k": "the number of clusters to be generated",
           "n": "the number of vectors to be generated",
-          "Random": "if not given, the program will ignore k and n and take them at random"})
+          "Random": "if not specified, the program will ignore k and n and choose them at random"})
 def run(c, k, n, Random=True):
-    """the program generate n random 2d or 3d vectors distributed to k clusters then finds the clusters using both
-    spectral clustering and the k-means++ algorithm finally it wright the results in a txt file and return a PDF file
-    with the visualisation of the results and the juccrd measure of both algorithms 
-    """  # todo check with ido
+    """
+    Runs a program which computes ond compares Kmeans clustering vs. Spectral clustering for given variables.
+    The program generates n random 2d or 3d vectors distributed to k clusters.
+    next the program finds the clusters using both spectral clustering and the k-means++ algorithm.
+    The results of the test are saved to a txt file and a visualization of the results and the comparison are
+    saved in a PDF
+    """
     c.run("python setup.py build_ext --inplace")  # todo write python3.8.5 instead
     c.run("python main.py {n:} {k:} {random:}".format(n=n, k=k, random=("--Random" if Random else "")))  # # todo write python3.8.5 insted
 
