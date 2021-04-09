@@ -36,9 +36,6 @@ clusters.txt - contains the clusters computed by the different algorithms
 # todo errors
 # todo remove unnecessary tasks
 # todo find and add final n, k
-# todo remove redundant MGS methods
-# todo check tasks documentation
-# todo tasks - change to python 3.8.5
 # todo check no todo's left
 # todo run one last time
 

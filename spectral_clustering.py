@@ -72,31 +72,12 @@ def MGS(A):
         R[i, i] += temp
         col = U[:, i] / temp
         Q[:, i] = col
+        # col is broadcasted to support matrix multiplication
+        # equivalent to computing R[i, j] += col @ U[:, j] for i+1 <= j <= n
         R[i, i + 1:] += col @ U[:, i + 1:]
+        # equivalent to computing U[:, j] = U[:, j] - R[i, j] * col for i+1 <= j <= n
+        # this is thanks to R being upper triangular
         U -= (R[i, :, np.newaxis] * col).T
-    return Q, R
-
-
-def MGS_opt2(A):
-    U = A.astype('float64').copy()
-    n = A.shape[0]  # size of matrix A
-
-    R = np.zeros([n, n])
-    Q = np.zeros([n, n])
-    Z = np.zeros([n, n])
-
-    for i in range(n):
-        R[i, i] = (np.linalg.norm(U[:, i]))
-        if R[i, i] == 0:
-            print("zero division")  # todo: exit with error message
-        Q[:, i] = U[:, i] / R[i, i]
-        R[i, i + 1:] = Q[:, i].T @ U[:, i + 1:]
-
-        if i < n - 1:
-            Z[:, i + 1:] = Q[:, i, np.newaxis] @ R[np.newaxis, i, i + 1:]
-            U -= Z
-            Z[:, i + 1] = 0
-
     return Q, R
 
 
@@ -114,13 +95,7 @@ def QR_iteration_algorithm(A):
     n = A.shape[0]  # A is (nxn)
     Q_bar = np.identity(n)
     for i in range(n):
-        # Q, R = MGS(A)
-        Q2, R2 = MGS_opt2(A)  # todo check with ido
-        Q, R = MGS(A)  # todo check with ido
-        # print((Q-Q2).sum())
-        # print((R - R2).sum())
-        # print(f"the diffrence is  :  Q {(Q - Q2).max()}"
-        #       f"R :  {(R - R2).max()} ")
+        Q, R = MGS(A)
         A = R @ Q
         new_Q_bar = Q_bar @ Q
         ep = (np.absolute(Q_bar) - np.absolute(new_Q_bar)).max()

@@ -2,7 +2,7 @@ from invoke import task
 import time
 
 
-@task(post=[delete], name='run',
+@task(name='run',
       help={
           "k": "the number of clusters to be generated",
           "n": "the number of vectors to be generated",
@@ -15,8 +15,8 @@ def run(c, k, n, Random=True):
     The results of the test are saved to a txt file and a visualization of the results and the comparison are
     saved in a PDF
     """
-    c.run("python setup.py build_ext --inplace")  # todo write python3.8.5 instead
-    c.run("python main.py {n:} {k:} {random:}".format(n=n, k=k, random=("--Random" if Random else "")))  # # todo write python3.8.5 insted
+    c.run("python3.8.5 setup.py build_ext --inplace")
+    c.run("python3.8.5 main.py {n:} {k:} {random:}".format(n=n, k=k, random=("--Random" if Random else "")))
 
 
 @task(name='find_critical', aliases='find')
@@ -30,8 +30,8 @@ def nk_find(c):
             while t2 - t1 < ((5 * 60) - 1):
                 n+= add[j]
                 t1 = time.time()
-                print("python3.8.5 main.py {n:} {k:} {random:}".format(n=n, k=k, random="--Random"))
-                c.run("python3.8.5 main.py {n:} {k:} {random:}".format(n=n, k=k, random="--Random"))
+                print("python3.8.5 main.py {n:} {k:} {random:}".format(n=n, k=k, random="--no-Random"))
+                c.run("python3.8.5 main.py {n:} {k:} {random:}".format(n=n, k=k, random="--no-Random"))
                 t2 = time.time()
                 print(t2-t1)
             n -= add[j]
