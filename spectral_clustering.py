@@ -25,7 +25,6 @@ def spectral_clustering(vectors, n):
             temp = find_weight(vectors[i], vectors[j])
             WAM[i, j] = temp
             WAM[j, i] = temp
-    # WAM = WAM + WAM.T
 
     # Compute the Diagonal Degree Matrix ^0.5
     DDM = np.zeros((n, n), dtype=np.float32)
@@ -70,41 +69,11 @@ def MGS(A):
     Q = np.zeros((n, n))
     for i in range(n):
         temp = np.linalg.norm(U[:, i])
-        R[i, i] = temp
+        R[i, i] += temp
         col = U[:, i] / temp
         Q[:, i] = col
-        for j in range(i + 1, n):
-            Rij = col @ U[:, j]
-            R[i, j] = Rij
-            U[:, j] = U[:, j] - Rij * col
-    return Q, R
-    #todo division by error
-
-def MGS_opt(A):
-    """
-    Modified Gram-Shmidt algorithm
-
-    arguments:
-    A - a matrix of size n*n
-
-    returns a tuple containing a decomposition of A into two matrices, Q and R, where A = QR and:
-        [0] Q is orthogonal
-        [1] R is upper triangular
-    """
-    n = A.shape[0]
-    U = A.copy()
-    R = np.zeros((n, n))
-    Q = np.zeros((n, n))
-
-    for i in range(n):
-        temp = np.linalg.norm(U[:, i])
-        R[i, i] = temp
-        col = U[:, i] / temp
-        Q[:, i] = col
-        R[i, i + 1:] = col @ U[:, i + 1:]
-        U = U - (R[i, :][:, np.newaxis] * col).T
-        if np.isnan(R).any() or np.isnan(U).any() or np.isnan(Q).any(): # todo remove
-            print(f"found nan in iteration :{i}")
+        R[i, i + 1:] += col @ U[:, i + 1:]
+        U -= (R[i, :, np.newaxis] * col).T
     return Q, R
 
 
@@ -145,9 +114,11 @@ def QR_iteration_algorithm(A):
     n = A.shape[0]  # A is (nxn)
     Q_bar = np.identity(n)
     for i in range(n):
-        #Q, R = MGS(A)
-        Q, R = MGS_opt(A)  # todo check with ido
-        # Q2, R2 = MGS_opt2(A)  # todo check with ido
+        # Q, R = MGS(A)
+        Q2, R2 = MGS_opt2(A)  # todo check with ido
+        Q, R = MGS(A)  # todo check with ido
+        # print((Q-Q2).sum())
+        # print((R - R2).sum())
         # print(f"the diffrence is  :  Q {(Q - Q2).max()}"
         #       f"R :  {(R - R2).max()} ")
         A = R @ Q
