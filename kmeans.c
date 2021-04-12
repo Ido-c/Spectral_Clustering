@@ -271,7 +271,7 @@ static PyObject *jaccard(PyObject *self, PyObject *args) {
     free(corg);
     free(cnew);
     if(dist == -1){
-        PyErr_SetString(PyExc_ValueError, "division by zero"); //todo
+        PyErr_SetString(PyExc_ValueError, "division by zero in calcJaccard");
         return NULL;
     }
     return Py_BuildValue("f", dist);

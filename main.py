@@ -6,8 +6,8 @@ from spectral_clustering import spectral_clustering
 from kmeans_pp import k_means_pp
 import mykmeanssp as kmns
 
-MAX_CAP_N = 250
-MAX_CAP_K = 10
+MAX_CAP_N = 450
+MAX_CAP_K = 20
 
 '''
 Main module of program.
@@ -71,7 +71,7 @@ def main(n, k, random):
 
     # Generate random data with indexed data points
     vectors, clusters = make_blobs(n_samples=n, n_features=d, centers=k)
-
+    vectors, clusters = vectors.astype(np.float32), clusters.astype(np.int32)
     # Create 1st txt file and save randomized data
     utils.save_data(vectors, clusters, d)
 
