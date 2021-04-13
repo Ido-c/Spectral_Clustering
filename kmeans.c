@@ -20,7 +20,7 @@ static double calcJaccard(long *, long *, int);
  * MAX_ITER - max number of iterations
  */
 static PyObject *kmeans(PyObject *self, PyObject *args) {
-    PyObject *temp_centroids, *temp_vectors, *item, *python_list, *python_int, *ext_list, *inner_list, *cluster_list, *rtn_tup;
+    PyObject *temp_centroids, *temp_vectors, *item, *python_int, *ext_list, *inner_list, *cluster_list, *rtn_tup;
     int k, n, d, MAX_ITER, i, j, tries, change, *p3, **clusters, temp_len;
     double *p1, *p2, **vectors, **centroids, *vecOfSums;
 

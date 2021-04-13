@@ -14,7 +14,7 @@ Main module of program.
 Program computes ond compares Kmeans clustering vs. Spectral clustering for variables given by user.
 
 Max capacity for n and k are the values for which the program does not a accede running time of 5 minutes on nova
-n = 250, k = 10
+n = 450, k = 20
 
 arguments:
 n - # of vectors
@@ -33,11 +33,9 @@ clusters.txt - contains the clusters computed by the different algorithms
 
 
 # todo nk message in beginning
-# todo errors
-# todo remove unnecessary tasks
 # todo find and add final n, k
-# todo check no todo's left
 # todo run one last time
+# todo check no todo's left
 
 
 # argument assertion function
