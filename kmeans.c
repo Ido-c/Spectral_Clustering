@@ -20,7 +20,7 @@ static double calcJaccard(long *, long *, int);
  * MAX_ITER - max number of iterations
  */
 static PyObject *kmeans(PyObject *self, PyObject *args) {
-    PyObject *temp_centroids, *temp_vectors, *item, *python_list, *python_int, *ext_list, *inner_list, *cluster_list, *rtn_tup;
+    PyObject *temp_centroids, *temp_vectors, *item, *python_int, *ext_list, *inner_list, *cluster_list, *rtn_tup;
     int k, n, d, MAX_ITER, i, j, tries, change, *p3, **clusters, temp_len;
     double *p1, *p2, **vectors, **centroids, *vecOfSums;
 
@@ -190,7 +190,7 @@ int updateCentroid(int *clusterVec, double *centroidVec, double **allVecs, const
     }
     for (i = 0; i < d; ++i) {
         vecOfSums[i] = (vecOfSums[i] / (double) numOfElms);
-        if (centroidVec[i] != vecOfSums[i]) {
+        if (centroidVec[i] <= vecOfSums[i] - 0.0001 || centroidVec[i] >= vecOfSums[i] + 0.0001) {
             centroidVec[i] = vecOfSums[i];
             flag = 1;
         }
@@ -271,7 +271,7 @@ static PyObject *jaccard(PyObject *self, PyObject *args) {
     free(corg);
     free(cnew);
     if(dist == -1){
-        PyErr_SetString(PyExc_ValueError, "division by zero"); //todo
+        PyErr_SetString(PyExc_ValueError, "division by zero in calcJaccard");
         return NULL;
     }
     return Py_BuildValue("f", dist);
