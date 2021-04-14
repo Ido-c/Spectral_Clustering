@@ -45,6 +45,10 @@ def spectral_clustering(vectors, n):
 
     # Create matrix T  from U by renormalizing each of U's rows to have unit length
     T = np.divide(U.T, np.linalg.norm(U, axis=1)).T
+    if np.isnan(T).any():
+        raise ZeroDivisionError("division by zero in spectral_clustering")
+        # without error nans will only produce warning
+
 
     # Treating each row of T as a point in Rk, cluster them into k clusters via the K-means algorithm
     clstr_to_vec, vec_to_clstr = kmeans_pp.k_means_pp(T, k, T.shape[1], T.shape[0], 300)
@@ -65,16 +69,18 @@ def MGS(A):
     """
     n = A.shape[0]
     U = A.copy()
-    R = np.zeros((n, n))
-    Q = np.zeros((n, n))
+    R = np.zeros((n, n), dtype=np.float32)
+    Q = np.zeros((n, n), dtype=np.float32)
     for i in range(n):
         temp = np.linalg.norm(U[:, i])
+        if temp == 0:
+            raise ZeroDivisionError("division by zero in spectral_clustering")
         R[i, i] += temp
         col = U[:, i] / temp
         Q[:, i] = col
         # col is broadcasted to support matrix multiplication
         # equivalent to computing R[i, j] += col @ U[:, j] for i+1 <= j <= n
-        R[i, i + 1:] += col @ U[:, i + 1:]
+        R[i, i + 1:] = col @ U[:, i + 1:]
         # equivalent to computing U[:, j] = U[:, j] - R[i, j] * col for i+1 <= j <= n
         # this is thanks to R being upper triangular
         U -= (R[i, :, np.newaxis] * col).T
@@ -93,17 +99,17 @@ def QR_iteration_algorithm(A):
         [1] 2D array of eigenvectors so that Q_bar[i] belongs to the value at eigenvalues[i]
     """
     n = A.shape[0]  # A is (nxn)
-    Q_bar = np.identity(n)
+    Q_bar = np.identity(n,dtype=np.float32)
     for i in range(n):
         Q, R = MGS(A)
         A = R @ Q
         new_Q_bar = Q_bar @ Q
         ep = (np.absolute(Q_bar) - np.absolute(new_Q_bar)).max()
-        if ep < 0.0001:
+        if ep <= 0.0001:
             break
         Q_bar = new_Q_bar
         # we dont need the rest of A , so we return only the eigenvalues
-    eigenvalues = np.array([A[i, i] for i in range(n)], dtype=np.float64)
+    eigenvalues = np.array([A[i, i] for i in range(n)], dtype=np.float32)
     return eigenvalues, Q_bar
 
 

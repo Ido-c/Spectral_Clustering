@@ -6,15 +6,15 @@ from spectral_clustering import spectral_clustering
 from kmeans_pp import k_means_pp
 import mykmeanssp as kmns
 
-MAX_CAP_N = 250
-MAX_CAP_K = 10
+MAX_CAP_N = 450
+MAX_CAP_K = 20
 
 '''
 Main module of program.
 Program computes ond compares Kmeans clustering vs. Spectral clustering for variables given by user.
 
 Max capacity for n and k are the values for which the program does not a accede running time of 5 minutes on nova
-n = 250, k = 10
+n = 450, k = 20
 
 arguments:
 n - # of vectors
@@ -33,11 +33,9 @@ clusters.txt - contains the clusters computed by the different algorithms
 
 
 # todo nk message in beginning
-# todo errors
-# todo remove unnecessary tasks
 # todo find and add final n, k
-# todo check no todo's left
 # todo run one last time
+# todo check no todo's left
 
 
 # argument assertion function
@@ -71,7 +69,7 @@ def main(n, k, random):
 
     # Generate random data with indexed data points
     vectors, clusters = make_blobs(n_samples=n, n_features=d, centers=k)
-
+    vectors, clusters = vectors.astype(np.float32), clusters.astype(np.int32)
     # Create 1st txt file and save randomized data
     utils.save_data(vectors, clusters, d)
 
