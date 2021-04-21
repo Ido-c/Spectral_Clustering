@@ -91,8 +91,8 @@ def save_to_pdf(vectors, spectral, kmeans, dim, k, n, obs_k, sjm, kjm):
     text = f"""Data was generated from the values:
     n = {n:}, k = {k:}
     The k that was used for both algorithms was {obs_k:}
-    The Jaccard measure for Spectral clustering: {sjm:}
-    The Jaccard measure for K-means: {kjm:}
+    The Jaccard measure for Spectral clustering: {sjm:.2f}
+    The Jaccard measure for K-means: {kjm:.2f}
     """
     plot3.text(1.1, 0.4, text, ha="center")
     fig.savefig("clusters.pdf")
