@@ -74,7 +74,7 @@ def main(n, k, random):
     utils.save_data(vectors, clusters, d)
 
     # Run Spectral Clustering
-    s_clstr_to_vec, s_vec_to_clstr, obs_k = spectral_clustering(vectors, n)
+    s_clstr_to_vec, s_vec_to_clstr, obs_k = spectral_clustering(vectors, n, k=-1 if random else k)
 
     # Run K_means
     k_clstr_to_vec, k_vec_to_clstr = k_means_pp(vectors, obs_k, d, n, 300)
@@ -98,6 +98,3 @@ if __name__ == "__main__":
     parser.add_argument('--Random', help="random k and n", default=False, action='store_true')
     args = parser.parse_args()
     main(args.n, args.k, args.Random)
-
-
-

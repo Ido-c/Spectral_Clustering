@@ -2,8 +2,10 @@ import numpy as np
 import kmeans_pp
 import math
 
+EPSILON = 0.0001
 
-def spectral_clustering(vectors, n):
+
+def spectral_clustering(vectors, n, k=-1):
     """
     Spectral clustering algorithm
 
@@ -37,23 +39,23 @@ def spectral_clustering(vectors, n):
     # Determine k using the Eigengap Heuristic and create list of indices representing the sorted eigenvalues
     eigenvalues, eigenvector_mat = QR_iteration_algorithm(Lnorm)
     order = np.argsort(eigenvalues)
-    k = eigengap(eigenvalues)
+    if k == -1:  # if no random
+        k = eigengap(eigenvalues)
 
     # Create a matrix U containing the vectors u_1 : u_k as columns
     # where u_i represents the eigenvector belonging to the ith smallest eigenvalue
     U = eigenvector_mat[:, order[0:k]]
 
-    # Create matrix T  from U by renormalizing each of U's rows to have unit length
-    T = np.divide(U.T, np.linalg.norm(U, axis=1)).T
-    if np.isnan(T).any():
-        raise ZeroDivisionError("division by zero in spectral_clustering")
-        # without error nans will only produce warning
+    # Create matrix T  from U by normalizing each of U's rows to have unit length
+    with np.errstate(divide='ignore', invalid='ignore'):  # division by zero will not produce warning
+        T = np.divide(U, (np.linalg.norm(U, axis=1)[:, np.newaxis]))
+        # if a zero-row exists then after the division it will be nans, so we will change it back
+        np.nan_to_num(T, 0)
 
+        # Treating each row of T as a point in Rk, cluster them into k clusters via the K-means algorithm
+    cluster_to_vec, vec_to_cluster = kmeans_pp.k_means_pp(T, k, T.shape[1], T.shape[0], 300)
 
-    # Treating each row of T as a point in Rk, cluster them into k clusters via the K-means algorithm
-    clstr_to_vec, vec_to_clstr = kmeans_pp.k_means_pp(T, k, T.shape[1], T.shape[0], 300)
-
-    return clstr_to_vec, vec_to_clstr, k
+    return cluster_to_vec, vec_to_cluster, k
 
 
 def MGS(A):
@@ -73,10 +75,8 @@ def MGS(A):
     Q = np.zeros((n, n), dtype=np.float32)
     for i in range(n):
         temp = np.linalg.norm(U[:, i])
-        if temp == 0:
-            raise ZeroDivisionError("division by zero in spectral_clustering")
+        col = np.zeros((n,)) if temp == 0 else U[:, i] / temp
         R[i, i] += temp
-        col = U[:, i] / temp
         Q[:, i] = col
         # col is broadcasted to support matrix multiplication
         # equivalent to computing R[i, j] += col @ U[:, j] for i+1 <= j <= n
@@ -99,13 +99,13 @@ def QR_iteration_algorithm(A):
         [1] 2D array of eigenvectors so that Q_bar[i] belongs to the value at eigenvalues[i]
     """
     n = A.shape[0]  # A is (nxn)
-    Q_bar = np.identity(n,dtype=np.float32)
+    Q_bar = np.identity(n, dtype=np.float32)
     for i in range(n):
         Q, R = MGS(A)
         A = R @ Q
         new_Q_bar = Q_bar @ Q
-        ep = (np.absolute(Q_bar) - np.absolute(new_Q_bar)).max()
-        if ep <= 0.0001:
+        diff = (np.absolute(Q_bar) - np.absolute(new_Q_bar)).max()
+        if diff <= EPSILON:
             break
         Q_bar = new_Q_bar
         # we dont need the rest of A , so we return only the eigenvalues
