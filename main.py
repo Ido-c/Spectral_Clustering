@@ -6,9 +6,9 @@ from spectral_clustering import spectral_clustering
 from kmeans_pp import k_means_pp
 import mykmeanssp as kmns
 
-MAX_CAP_N_3D = 450
+MAX_CAP_N_3D = 390
 MAX_CAP_K_3D = 20
-MAX_CAP_N_2D = 450
+MAX_CAP_N_2D = 400
 MAX_CAP_K_2D = 20
 
 '''
@@ -16,8 +16,9 @@ Main module of program.
 Program computes ond compares Kmeans clustering vs. Spectral clustering for variables given by user.
 
 Max capacity for n and k are the values for which the program does not a accede running time of 5 minutes on nova
-n = 450, k = 20
-
+    for 2D vectors: n = 400, k = 20
+    for 3D vectors: n = 390, k = 20
+    
 arguments:
 n - # of vectors
 k - # of clusters
@@ -69,8 +70,8 @@ def main(n, k, random):
         return
 
     # Print max capacity
-    print(f"max capacity of k : 2D {MAX_CAP_K_2D}  3D{MAX_CAP_K_3D}\n"
-          f"max capacity of n :  2D {MAX_CAP_N_2D}  3D{MAX_CAP_N_3D}\n")
+    print(f"max capacity of k : 2D {MAX_CAP_K_2D}  3D {MAX_CAP_K_3D}\n"
+          f"max capacity of n : 2D {MAX_CAP_N_2D}  3D {MAX_CAP_N_3D}\n")
 
     # Generate random data with indexed data points
     vectors, clusters = make_blobs(n_samples=n, n_features=d, centers=k)

@@ -27,16 +27,16 @@ def k_means_pp(vectors, K, d, N, MAX_ITER):
     centroid_indices[0] = np.random.choice(N, 1)
     centroids = np.zeros((K, d), dtype=np.float64)
 
-    # step 1 put an initial vector by random
+    # choose an initial vector by random
 
     centroids[0] = vectors[centroid_indices[0]]
     distance = np.power(np.linalg.norm(vectors - centroids[centroids_count - 1], axis=1), 2)
     while centroids_count < K:
         new_dist = np.power(np.linalg.norm(vectors - centroids[centroids_count - 1], axis=1), 2)
         distance = np.minimum(distance, new_dist)
-        # step 3 make a probability vector from the distances vector
+        # make a probability vector from the distances vector
         p = distance / distance.sum()
-        # step 4 set the new centroid by taking the
+        # set the new centroid
         centroid_indices[centroids_count] = np.random.choice(N, 1, p=p)
         centroids[centroids_count] = vectors[centroid_indices[centroids_count]]
         centroids_count += 1
