@@ -50,6 +50,7 @@ def write_to_file(s_clusters, k_clusters, k):
         second_f.write(str(k_clusters[i])[1: -1] + "\n")
     second_f.close()
 
+
 def save_to_pdf(vectors, spectral, kmeans, dim, k, n, obs_k, sjm, kjm):
     """
     saves a graphic visualisation to a pdf file "clusters.pdf"
@@ -96,6 +97,3 @@ def save_to_pdf(vectors, spectral, kmeans, dim, k, n, obs_k, sjm, kjm):
     """
     plot3.text(1.1, 0.4, text, ha="center")
     fig.savefig("clusters.pdf")
-
-
-

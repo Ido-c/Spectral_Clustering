@@ -73,9 +73,10 @@ def MGS(A):
     U = A.copy()
     R = np.zeros((n, n), dtype=np.float32)
     Q = np.zeros((n, n), dtype=np.float32)
+    zero = np.zeros((n,))
     for i in range(n):
         temp = np.linalg.norm(U[:, i])
-        col = np.zeros((n,)) if temp < 0 else U[:, i] / temp
+        col = zero if temp < EPSILON else U[:, i] / temp
         R[i, i] += temp
         Q[:, i] = col
         # col is broadcasted to support matrix multiplication
