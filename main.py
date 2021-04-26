@@ -6,9 +6,9 @@ from spectral_clustering import spectral_clustering
 from kmeans_pp import k_means_pp
 import mykmeanssp as kmns
 
-MAX_CAP_N_3D = 390
+MAX_CAP_N_3D = 340
 MAX_CAP_K_3D = 20
-MAX_CAP_N_2D = 400
+MAX_CAP_N_2D = 350
 MAX_CAP_K_2D = 20
 
 '''
@@ -16,8 +16,8 @@ Main module of program.
 Program computes ond compares Kmeans clustering vs. Spectral clustering for variables given by user.
 
 Max capacity for n and k are the values for which the program does not a accede running time of 5 minutes on nova
-    for 2D vectors: n = 400, k = 20
-    for 3D vectors: n = 390, k = 20
+    for 2D vectors: n = 350, k = 20
+    for 3D vectors: n = 340, k = 20
     
 arguments:
 n - # of vectors
@@ -33,13 +33,6 @@ clusters.txt - contains the clusters computed by the different algorithms
         using their index in the data file
     next k lines are the same, but for the K-means algorithm
 '''
-
-
-# todo nk message in beginning
-# todo find and add final n, k for 2d and 3d
-# todo run one last time
-# todo check no todo's left
-# todo bom
 
 
 # argument assertion function

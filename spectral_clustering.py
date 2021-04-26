@@ -99,6 +99,7 @@ def QR_iteration_algorithm(A):
         [0] 1D array of the eigenvalues of A
         [1] 2D array of eigenvectors so that Q_bar[i] belongs to the value at eigenvalues[i]
     """
+    A = A.copy()  # we copy A so that we wont change the matrix given to us
     n = A.shape[0]  # A is (nxn)
     Q_bar = np.identity(n, dtype=np.float32)
     for i in range(n):
